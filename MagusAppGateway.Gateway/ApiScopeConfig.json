@@ -1,9 +1,0 @@
-{
-  "ApiScopes": [
-    {
-      "AuthenticationProviderKey": "api1",
-      "ApiName": "testname",
-      "ApiSecret": "123"
-    }
-  ]
-}

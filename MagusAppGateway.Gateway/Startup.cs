@@ -24,32 +24,17 @@ namespace MagusAppGateway.Gateway
         {
             services.AddOcelot();
             var ocelotConfigModel = OcelotConfigJsonToModel.OcelotConfigJsonCoverToModel();
-            //var apiScopeConfigModel = OcelotConfigJsonToModel.ApiScopeConfigCoverToModel();
             if (ocelotConfigModel != null)
             {
                 foreach (var item in ocelotConfigModel.Routes)
                 {
                     if (item.AuthenticationOptions != null)
                     {
-                        //var model = apiScopeConfigModel.ApiScopes.FirstOrDefault(x => x.AuthenticationProviderKey == item.AuthenticationOptions.AuthenticationProviderKey);
-                        //if (model == null)
-                        //{
-                        //    //找不到对应配置就没有授权信息
-                        //    continue;
-                        //}
-                        //services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
-                        //{
-                        //    options.Authority = Configuration.GetSection("IdentityAddress").Value;
-                        //    options.RequireHttpsMetadata = false;
-                        //    options.Audience = model.ApiName;
-                        //});
                         services.AddAuthentication().AddIdentityServerAuthentication(item.AuthenticationOptions.AuthenticationProviderKey, options =>
                         {
                             options.Authority = Configuration.GetSection("IdentityAddress").Value;
                             options.RequireHttpsMetadata = false;
-                            //options.ApiName = model.ApiName;
                             options.SupportedTokens = SupportedTokens.Both;
-                            //options.ApiSecret = model.ApiSecret;
                         });
                     }
                 }
