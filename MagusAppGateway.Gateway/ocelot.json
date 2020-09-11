@@ -1,0 +1,29 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 1001
+        },
+        {
+          "Host": "127.0.0.1",
+          "Port": 1002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "RouteIsCaseSensitive": false,
+      "LoadBalancer": "RoundRobin",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "api1",
+        "AllowedScopes": [ ]
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://127.0.0.1:5002"
+  }
+}
