@@ -9,6 +9,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly IUserService _userService;

@@ -18,13 +18,6 @@ namespace MagusAppGateway.Gateway
             return model;
         }
 
-        public static ApiScopesConfigModel ApiScopeConfigCoverToModel()
-        {
-            string json = GetFileJson("ApiScopeConfig.json");
-            var model = JsonConvert.DeserializeObject<ApiScopesConfigModel>(json);
-            return model;
-        }
-
         private static string GetFileJson(string filepath)
         {
             string json = string.Empty;

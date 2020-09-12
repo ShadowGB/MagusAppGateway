@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using MagusAppGateway.Services.IServices;
 using MagusAppGateway.Models.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MagusAppGateway.ConfigWebApi.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
+    [Authorize]
     public class ApiScopeController : Controller
     {
         private readonly IApiScopeService _apiScopeService;

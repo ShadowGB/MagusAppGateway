@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using MagusAppGateway.Services.IServices;
 using MagusAppGateway.Models.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MagusAppGateway.ConfigWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class ClientController : Controller
     {
         private readonly IClientService _clientService;

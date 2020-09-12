@@ -24,24 +24,24 @@ namespace MagusAppGateway.Services.Services
 
         public async Task<ResultModel> CreateClient(ClientCreateDto clientCreateDto)
         {
-            List<ClientIdPRestriction> clientIdPRestrictions = new List<ClientIdPRestriction>();
-            foreach (var item in clientCreateDto.IdentityProviderRestrictions)
-            {
-                clientIdPRestrictions.Add(new ClientIdPRestriction
-                {
-                    Provider = item.Provider
-                });
-            }
+            //List<ClientIdPRestriction> clientIdPRestrictions = new List<ClientIdPRestriction>();
+            //foreach (var item in clientCreateDto.IdentityProviderRestrictions)
+            //{
+            //    clientIdPRestrictions.Add(new ClientIdPRestriction
+            //    {
+            //        Provider = item.Provider
+            //    });
+            //}
 
-            List<IdentityServer4.EntityFramework.Entities.ClientClaim> clientClaims = new List<IdentityServer4.EntityFramework.Entities.ClientClaim>();
-            foreach (var item in clientCreateDto.Claims)
-            {
-                clientClaims.Add(new IdentityServer4.EntityFramework.Entities.ClientClaim
-                {
-                    Type = item.Type,
-                    Value = item.Value
-                });
-            }
+            //List<IdentityServer4.EntityFramework.Entities.ClientClaim> clientClaims = new List<IdentityServer4.EntityFramework.Entities.ClientClaim>();
+            //foreach (var item in clientCreateDto.Claims)
+            //{
+            //    clientClaims.Add(new IdentityServer4.EntityFramework.Entities.ClientClaim
+            //    {
+            //        Type = item.Type,
+            //        Value = item.Value
+            //    });
+            //}
 
             List<ClientCorsOrigin> clientCorsOrigins = new List<ClientCorsOrigin>();
             foreach (var item in clientCreateDto.AllowedCorsOrigins)
@@ -52,15 +52,15 @@ namespace MagusAppGateway.Services.Services
                 });
             }
 
-            List<ClientProperty> clientProperties = new List<ClientProperty>();
-            foreach (var item in clientCreateDto.Properties)
-            {
-                clientProperties.Add(new ClientProperty
-                {
-                    Key = item.Key,
-                    Value = item.Value
-                });
-            }
+            //List<ClientProperty> clientProperties = new List<ClientProperty>();
+            //foreach (var item in clientCreateDto.Properties)
+            //{
+            //    clientProperties.Add(new ClientProperty
+            //    {
+            //        Key = item.Key,
+            //        Value = item.Value
+            //    });
+            //}
 
             List<ClientScope> clientScopes = new List<ClientScope>();
             foreach (var item in clientCreateDto.AllowedScopes)
@@ -116,22 +116,22 @@ namespace MagusAppGateway.Services.Services
                 {
                     Enabled = clientCreateDto.Enabled,
                     ClientId = clientCreateDto.ClientId,
-                    ProtocolType = clientCreateDto.ProtocolType ?? "oidc",
+                    //ProtocolType = clientCreateDto.ProtocolType ?? "oidc",
                     RequireClientSecret = clientCreateDto.RequireClientSecret ?? true,
                     ClientName = clientCreateDto.ClientName,
                     Description = clientCreateDto.Description??"",
-                    ClientUri = clientCreateDto.ClientUri??"",
-                    LogoUri = clientCreateDto.LogoUri ?? "",
-                    RequireConsent = clientCreateDto.RequireConsent ?? false,
-                    AllowRememberConsent = clientCreateDto.AllowRememberConsent ?? true,
+                    //ClientUri = clientCreateDto.ClientUri??"",
+                    //LogoUri = clientCreateDto.LogoUri ?? "",
+                    //RequireConsent = clientCreateDto.RequireConsent ?? false,
+                    //AllowRememberConsent = clientCreateDto.AllowRememberConsent ?? true,
                     AlwaysIncludeUserClaimsInIdToken = clientCreateDto.AlwaysIncludeUserClaimsInIdToken,
-                    AllowPlainTextPkce = clientCreateDto.AllowPlainTextPkce,
-                    RequireRequestObject = clientCreateDto.RequireRequestObject,
+                    //AllowPlainTextPkce = clientCreateDto.AllowPlainTextPkce,
+                    //RequireRequestObject = clientCreateDto.RequireRequestObject,
                     AllowAccessTokensViaBrowser = clientCreateDto.AllowAccessTokensViaBrowser,
-                    FrontChannelLogoutUri = clientCreateDto.FrontChannelLogoutUri,
-                    FrontChannelLogoutSessionRequired = clientCreateDto.FrontChannelLogoutSessionRequired ?? true,
-                    BackChannelLogoutUri = clientCreateDto.BackChannelLogoutUri,
-                    BackChannelLogoutSessionRequired = clientCreateDto.BackChannelLogoutSessionRequired ?? true,
+                    //FrontChannelLogoutUri = clientCreateDto.FrontChannelLogoutUri,
+                    //FrontChannelLogoutSessionRequired = clientCreateDto.FrontChannelLogoutSessionRequired ?? true,
+                    //BackChannelLogoutUri = clientCreateDto.BackChannelLogoutUri,
+                    //BackChannelLogoutSessionRequired = clientCreateDto.BackChannelLogoutSessionRequired ?? true,
                     AllowOfflineAccess = clientCreateDto.AllowOfflineAccess,
                     IdentityTokenLifetime = clientCreateDto.IdentityTokenLifetime ?? 300,
                     AllowedIdentityTokenSigningAlgorithms = clientCreateDto.AllowedIdentityTokenSigningAlgorithms,
@@ -159,11 +159,11 @@ namespace MagusAppGateway.Services.Services
                     RedirectUris = clientRedirectUris,
                     PostLogoutRedirectUris = clientPostLogoutRedirectUris,
                     AllowedScopes = clientScopes,
-                    IdentityProviderRestrictions = clientIdPRestrictions,
+                    //IdentityProviderRestrictions = clientIdPRestrictions,
                     AllowedCorsOrigins = clientCorsOrigins,
-                    Properties = clientProperties,
-                    Claims = clientClaims,
-                    RequirePkce = clientCreateDto.RequirePkce ?? true,
+                    //Properties = clientProperties,
+                    //Claims = clientClaims,
+                    //RequirePkce = clientCreateDto.RequirePkce ?? true,
                 };
 
 
@@ -386,30 +386,30 @@ namespace MagusAppGateway.Services.Services
                 .Include(x => x.RedirectUris)
                 .Include(x => x.PostLogoutRedirectUris)
                 .Include(x => x.AllowedScopes)
-                .Include(x => x.IdentityProviderRestrictions)
-                .Include(x => x.Claims)
+                //.Include(x => x.IdentityProviderRestrictions)
+                //.Include(x => x.Claims)
                 .Include(x => x.AllowedCorsOrigins)
-                .Include(x => x.Properties)
+                //.Include(x => x.Properties)
                 .FirstOrDefaultAsync();
 
             client.Enabled = clientUpdateDto.Enabled;
             client.ClientId = clientUpdateDto.ClientId;
-            client.ProtocolType = clientUpdateDto.ProtocolType;
+            //client.ProtocolType = clientUpdateDto.ProtocolType;
             client.RequireClientSecret = clientUpdateDto.RequireClientSecret;
             client.ClientName = clientUpdateDto.ClientName;
             client.Description = clientUpdateDto.Description;
-            client.ClientUri = clientUpdateDto.ClientUri;
-            client.LogoUri = clientUpdateDto.LogoUri;
-            client.RequireConsent = clientUpdateDto.RequireConsent;
-            client.AllowRememberConsent = clientUpdateDto.AllowRememberConsent;
+            //client.ClientUri = clientUpdateDto.ClientUri;
+            //client.LogoUri = clientUpdateDto.LogoUri;
+            //client.RequireConsent = clientUpdateDto.RequireConsent;
+            //client.AllowRememberConsent = clientUpdateDto.AllowRememberConsent;
             client.AlwaysIncludeUserClaimsInIdToken = clientUpdateDto.AlwaysIncludeUserClaimsInIdToken;
-            client.AllowPlainTextPkce = clientUpdateDto.AllowPlainTextPkce;
-            client.RequireRequestObject = clientUpdateDto.RequireRequestObject;
+            //client.AllowPlainTextPkce = clientUpdateDto.AllowPlainTextPkce;
+            //client.RequireRequestObject = clientUpdateDto.RequireRequestObject;
             client.AllowAccessTokensViaBrowser = clientUpdateDto.AllowAccessTokensViaBrowser;
-            client.FrontChannelLogoutUri = clientUpdateDto.FrontChannelLogoutUri;
-            client.FrontChannelLogoutSessionRequired = clientUpdateDto.FrontChannelLogoutSessionRequired;
-            client.BackChannelLogoutUri = clientUpdateDto.BackChannelLogoutUri;
-            client.BackChannelLogoutSessionRequired = clientUpdateDto.BackChannelLogoutSessionRequired;
+            //client.FrontChannelLogoutUri = clientUpdateDto.FrontChannelLogoutUri;
+            //client.FrontChannelLogoutSessionRequired = clientUpdateDto.FrontChannelLogoutSessionRequired;
+            //client.BackChannelLogoutUri = clientUpdateDto.BackChannelLogoutUri;
+            //client.BackChannelLogoutSessionRequired = clientUpdateDto.BackChannelLogoutSessionRequired;
             client.AllowOfflineAccess = clientUpdateDto.AllowOfflineAccess;
             client.IdentityTokenLifetime = clientUpdateDto.IdentityTokenLifetime;
             client.AllowedIdentityTokenSigningAlgorithms = clientUpdateDto.AllowedIdentityTokenSigningAlgorithms;
@@ -428,30 +428,30 @@ namespace MagusAppGateway.Services.Services
             client.PairWiseSubjectSalt = clientUpdateDto.PairWiseSubjectSalt;
             client.Updated = DateTime.Now;
             client.LastAccessed = clientUpdateDto.LastAccessed;
-            client.RequirePkce = clientUpdateDto.RequirePkce;
+            //client.RequirePkce = clientUpdateDto.RequirePkce;
             client.UserSsoLifetime = clientUpdateDto.UserSsoLifetime;
             client.UserCodeType = clientUpdateDto.UserCodeType;
             client.DeviceCodeLifetime = clientUpdateDto.DeviceCodeLifetime;
             client.NonEditable = clientUpdateDto.NonEditable;
 
             List<ClientIdPRestriction> clientIdPRestrictions = new List<ClientIdPRestriction>();
-            foreach (var item in clientUpdateDto.IdentityProviderRestrictions)
-            {
-                clientIdPRestrictions.Add(new ClientIdPRestriction
-                {
-                    Provider = item.Provider
-                });
-            }
+            //foreach (var item in clientUpdateDto.IdentityProviderRestrictions)
+            //{
+            //    clientIdPRestrictions.Add(new ClientIdPRestriction
+            //    {
+            //        Provider = item.Provider
+            //    });
+            //}
 
-            List<IdentityServer4.EntityFramework.Entities.ClientClaim> clientClaims = new List<IdentityServer4.EntityFramework.Entities.ClientClaim>();
-            foreach (var item in clientUpdateDto.Claims)
-            {
-                clientClaims.Add(new IdentityServer4.EntityFramework.Entities.ClientClaim
-                {
-                    Type = item.Type,
-                    Value = item.Value
-                });
-            }
+            //List<IdentityServer4.EntityFramework.Entities.ClientClaim> clientClaims = new List<IdentityServer4.EntityFramework.Entities.ClientClaim>();
+            //foreach (var item in clientUpdateDto.Claims)
+            //{
+            //    clientClaims.Add(new IdentityServer4.EntityFramework.Entities.ClientClaim
+            //    {
+            //        Type = item.Type,
+            //        Value = item.Value
+            //    });
+            //}
 
             List<ClientCorsOrigin> clientCorsOrigins = new List<ClientCorsOrigin>();
             foreach (var item in clientUpdateDto.AllowedCorsOrigins)
@@ -462,15 +462,15 @@ namespace MagusAppGateway.Services.Services
                 });
             }
 
-            List<ClientProperty> clientProperties = new List<ClientProperty>();
-            foreach (var item in clientUpdateDto.Properties)
-            {
-                clientProperties.Add(new ClientProperty
-                {
-                    Key = item.Key,
-                    Value = item.Value
-                });
-            }
+            //List<ClientProperty> clientProperties = new List<ClientProperty>();
+            //foreach (var item in clientUpdateDto.Properties)
+            //{
+            //    clientProperties.Add(new ClientProperty
+            //    {
+            //        Key = item.Key,
+            //        Value = item.Value
+            //    });
+            //}
 
             List<ClientScope> clientScopes = new List<ClientScope>();
             foreach (var item in clientUpdateDto.AllowedScopes)
@@ -529,8 +529,8 @@ namespace MagusAppGateway.Services.Services
             client.AllowedScopes = clientScopes;
             client.IdentityProviderRestrictions = clientIdPRestrictions;
             client.AllowedCorsOrigins = clientCorsOrigins;
-            client.Properties = clientProperties;
-            client.Claims = clientClaims;
+            //client.Properties = clientProperties;
+            //client.Claims = clientClaims;
 
             try
             {

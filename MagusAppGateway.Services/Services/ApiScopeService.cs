@@ -123,7 +123,7 @@ namespace MagusAppGateway.Services.Services
         {
             try
             {
-                var query = _userDatabaseContext.IdentityResources.Where(x => 1 == 1);
+                var query = _userDatabaseContext.ApiScopes.Where(x => 1 == 1);
                 if (!string.IsNullOrWhiteSpace(apiScopeQueryDto.Name))
                 {
                     query = query.Where(x => x.Name.Contains(apiScopeQueryDto.Name));

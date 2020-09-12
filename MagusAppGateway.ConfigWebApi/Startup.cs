@@ -10,6 +10,7 @@ using MagusAppGateway.Contexts;
 using MagusAppGateway.Services.Services;
 using MagusAppGateway.Services.IServices;
 using MagusAppGateway.Services.Automapper;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MagusAppGateway.ConfigWebApi
 {
@@ -41,6 +42,23 @@ namespace MagusAppGateway.ConfigWebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ÅäÖÃÖÐÐÄ", Version = "v1" });
             });
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = _configuration.GetSection("IdentityAddress").Value;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+                });
+
+            services.AddAuthorization(options => {
+                options.AddPolicy("ApiScope", policy => {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "config");
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -57,6 +75,8 @@ namespace MagusAppGateway.ConfigWebApi
             });
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
