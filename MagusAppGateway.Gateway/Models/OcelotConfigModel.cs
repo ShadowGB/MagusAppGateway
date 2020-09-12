@@ -203,7 +203,7 @@ namespace MagusAppGateway.Gateway.Models
         /// <summary>
         /// 
         /// </summary>
-        public string LoadBalancer { get; set; }
+        public LoadBalancerOption LoadBalancerOptions { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -228,6 +228,14 @@ namespace MagusAppGateway.Gateway.Models
         /// 
         /// </summary>
         public string BaseUrl { get; set; }
+    }
+
+    public class LoadBalancerOption
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Type { get; set; }
     }
 
     public class OcelotConfigModel

@@ -56,7 +56,7 @@ namespace MagusAppGateway.ConfigWebApi
             services.AddAuthorization(options => {
                 options.AddPolicy("ApiScope", policy => {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "config");
+                    policy.RequireClaim("scope", _configuration.GetSection("ScopeName").Value);
                 });
             });
         }

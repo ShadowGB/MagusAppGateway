@@ -16,10 +16,12 @@
       "UpstreamPathTemplate": "/api/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
       "RouteIsCaseSensitive": false,
-      "LoadBalancer": "RoundRobin",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "api1",
-        "AllowedScopes": [ ]
+        "AllowedScopes": []
       }
     }
   ],
