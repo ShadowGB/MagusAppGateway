@@ -58,5 +58,19 @@ PostgreSQL
 # 用户表
 __在生产过程中请勿使用这个项目里的用户表，密码都是明文存储的__
 
+# 怎样运行
+1.同时运行Auth、ConfigWebApi、Gateway和两个Demo服务。   
+
+2.调用http://localhost:5001/api/Users/ApplyToken 获取AccessToken   
+
+3.用PostMan请求http://localhost:5002/api/Value   
+
+4.返回401   
+
+5.把AccessToken加到Authorization中，Type选择OAth2.0或者Bearer Token   
+
+6.再次用PostMan请求http://localhost:5002/api/Value   
+
+7.能正常返回数据
 # 关于作者
 渣渣小开发一枚，邮箱：237213310@qq.com
