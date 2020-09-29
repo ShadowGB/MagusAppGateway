@@ -1,5 +1,6 @@
 # MagusAppGateway
-集成IdentityServer4的Ocelot网关
+集成IdentityServer4的Ocelot网关   
+IdentityServer4的服务可以单独使用作为授权中心
 
 # 账号
 用户名：admin   
