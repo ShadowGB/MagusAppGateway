@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MagusAppGateway.Services.Result;
 using MagusAppGateway.Models.Dtos;
+using System.Collections.Generic;
 
 namespace MagusAppGateway.Services.IServices
 {
@@ -13,6 +14,18 @@ namespace MagusAppGateway.Services.IServices
         Task<ResultModel> UpdateClient(ClientUpdateDto clientUpdateDto);
 
         Task<ResultModel> CreateClient(ClientCreateDto clientCreateDto);
+
+        Task<ResultModel> ConfigClientCorsOrigin(List<ClientCorsOriginCreateDto> clientCorsOriginCreateDtos,int clientId);
+
+        Task<ResultModel> ConfigClientGrantType(List<ClientGrantTypeCreateDto> clientGrantTypeCreateDtos, int clientId);
+
+        Task<ResultModel> ConfigClientPostLogoutRedirectUri(List<ClientPostLogoutRedirectUriCreateDto> clientPostLogoutRedirectUriCreateDtos, int clientId);
+
+        Task<ResultModel> ConfigClientRedirectUri(List<ClientRedirectUriCreateDto> clientRedirectUriCreateDtos, int clientId);
+
+        Task<ResultModel> ConfigClientScope(List<ClientScopeCreateDto> clientScopeCreateDtos, int clientId);
+
+        Task<ResultModel> ConfigClientSecret(List<ClientSecretCreateDto> clientSecretCreateDtos, int clientId);
 
     }
 }

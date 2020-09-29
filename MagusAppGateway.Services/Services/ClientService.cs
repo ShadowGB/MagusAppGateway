@@ -22,6 +22,174 @@ namespace MagusAppGateway.Services.Services
             _userDatabaseContext = userDatabaseContext;
         }
 
+        public async Task<ResultModel> ConfigClientCorsOrigin(List<ClientCorsOriginCreateDto> clientCorsOriginCreateDtos, int clientId)
+        {
+            var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
+                  .Include(x => x.AllowedCorsOrigins)
+                  .FirstOrDefaultAsync();
+
+            List<ClientCorsOrigin> clientCorsOrigins = new List<ClientCorsOrigin>();
+            foreach (var item in clientCorsOriginCreateDtos)
+            {
+                clientCorsOrigins.Add(new ClientCorsOrigin
+                {
+                    Origin = item.Origin
+                });
+            }
+            client.AllowedCorsOrigins = clientCorsOrigins;
+            try
+            {
+                _userDatabaseContext.Clients.Update(client);
+                await _userDatabaseContext.SaveChangesAsync();
+                return new ResultModel(ResultCode.Success, "更新客户端跨域配置成功");
+            }
+            catch (Exception ex)
+            {
+                return new ResultModel(ResultCode.Fail, ex.Message);
+            }
+        }
+
+        public async Task<ResultModel> ConfigClientGrantType(List<ClientGrantTypeCreateDto> clientGrantTypeCreateDtos, int clientId)
+        {
+            var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
+                     .Include(x => x.AllowedGrantTypes)
+                     .FirstOrDefaultAsync();
+
+            List<ClientGrantType> clientGrantTypes = new List<ClientGrantType>();
+            foreach (var item in clientGrantTypeCreateDtos)
+            {
+                clientGrantTypes.Add(new ClientGrantType
+                {
+                    GrantType = item.GrantType
+                });
+            }
+            client.AllowedGrantTypes = clientGrantTypes;
+            try
+            {
+                _userDatabaseContext.Clients.Update(client);
+                await _userDatabaseContext.SaveChangesAsync();
+                return new ResultModel(ResultCode.Success, "更新客户端授权配置成功");
+            }
+            catch (Exception ex)
+            {
+                return new ResultModel(ResultCode.Fail, ex.Message);
+            }
+        }
+
+        public async Task<ResultModel> ConfigClientPostLogoutRedirectUri(List<ClientPostLogoutRedirectUriCreateDto> clientPostLogoutRedirectUriCreateDtos, int clientId)
+        {
+            var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
+                     .Include(x => x.PostLogoutRedirectUris)
+                     .FirstOrDefaultAsync();
+
+            List<ClientPostLogoutRedirectUri> clientPostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>();
+            foreach (var item in clientPostLogoutRedirectUriCreateDtos)
+            {
+                clientPostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri
+                {
+                    PostLogoutRedirectUri = item.PostLogoutRedirectUri
+                });
+            }
+            client.PostLogoutRedirectUris = clientPostLogoutRedirectUris;
+            try
+            {
+                _userDatabaseContext.Clients.Update(client);
+                await _userDatabaseContext.SaveChangesAsync();
+                return new ResultModel(ResultCode.Success, "更新客户端登出回调地址配置成功");
+            }
+            catch (Exception ex)
+            {
+                return new ResultModel(ResultCode.Fail, ex.Message);
+            }
+        }
+
+        public async Task<ResultModel> ConfigClientRedirectUri(List<ClientRedirectUriCreateDto> clientRedirectUriCreateDtos, int clientId)
+        {
+            var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
+                        .Include(x => x.RedirectUris)
+                        .FirstOrDefaultAsync();
+
+
+            List<ClientRedirectUri> clientRedirectUris = new List<ClientRedirectUri>();
+            foreach (var item in clientRedirectUriCreateDtos)
+            {
+                clientRedirectUris.Add(new ClientRedirectUri
+                {
+                    RedirectUri = item.RedirectUri
+                });
+            }
+            client.RedirectUris = clientRedirectUris;
+            try
+            {
+                _userDatabaseContext.Clients.Update(client);
+                await _userDatabaseContext.SaveChangesAsync();
+                return new ResultModel(ResultCode.Success, "更新客户端登录回调地址配置成功");
+            }
+            catch (Exception ex)
+            {
+                return new ResultModel(ResultCode.Fail, ex.Message);
+            }
+        }
+
+        public async Task<ResultModel> ConfigClientScope(List<ClientScopeCreateDto> clientScopeCreateDtos, int clientId)
+        {
+            var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
+                        .Include(x => x.AllowedScopes)
+                        .FirstOrDefaultAsync();
+
+            List<ClientScope> clientScopes = new List<ClientScope>();
+            foreach (var item in clientScopeCreateDtos)
+            {
+                clientScopes.Add(new ClientScope
+                {
+                    Scope = item.Scope
+                });
+            }
+            client.AllowedScopes = clientScopes;
+            try
+            {
+                _userDatabaseContext.Clients.Update(client);
+                await _userDatabaseContext.SaveChangesAsync();
+                return new ResultModel(ResultCode.Success, "更新客户端API域配置成功");
+            }
+            catch (Exception ex)
+            {
+                return new ResultModel(ResultCode.Fail, ex.Message);
+            }
+        }
+
+        public async Task<ResultModel> ConfigClientSecret(List<ClientSecretCreateDto> clientSecretCreateDtos, int clientId)
+        {
+            var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
+                        .Include(x => x.ClientSecrets)
+                        .FirstOrDefaultAsync();
+
+
+            List<ClientSecret> clientSecrets = new List<ClientSecret>();
+            foreach (var item in clientSecretCreateDtos)
+            {
+                clientSecrets.Add(new ClientSecret
+                {
+                    Created = DateTime.Now,
+                    Description = item.Description,
+                    Expiration = item.Expiration,
+                    Type = "SharedSecret",
+                    Value = item.Value.ToSha256(),
+                });
+            }
+            client.ClientSecrets = clientSecrets;
+            try
+            {
+                _userDatabaseContext.Clients.Update(client);
+                await _userDatabaseContext.SaveChangesAsync();
+                return new ResultModel(ResultCode.Success, "更新客户端秘钥配置成功");
+            }
+            catch (Exception ex)
+            {
+                return new ResultModel(ResultCode.Fail, ex.Message);
+            }
+        }
+
         public async Task<ResultModel> CreateClient(ClientCreateDto clientCreateDto)
         {
             //List<ClientIdPRestriction> clientIdPRestrictions = new List<ClientIdPRestriction>();
@@ -376,7 +544,7 @@ namespace MagusAppGateway.Services.Services
                 //.Include(x => x.AllowedScopes)
                 //.Include(x => x.IdentityProviderRestrictions)
                 //.Include(x => x.Claims)
-                .Include(x => x.AllowedCorsOrigins)
+                //.Include(x => x.AllowedCorsOrigins)
                 //.Include(x => x.Properties)
                 .FirstOrDefaultAsync();
 

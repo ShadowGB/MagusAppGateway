@@ -40,7 +40,7 @@ namespace MagusAppGateway.ConfigWebApi
             services.AddAutoMapper(typeof(AutomapperConfig));
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "配置中心", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "配置中心", Version = "v1"});
             });
 
             services.AddAuthentication("Bearer")
