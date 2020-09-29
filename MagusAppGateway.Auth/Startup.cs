@@ -11,8 +11,9 @@ using MagusAppGateway.Services.Services;
 using MagusAppGateway.Contexts;
 using MagusAppGateway.Services.Automapper;
 using AutoMapper;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using IdentityServer4.Validation;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace MagusAppGateway.Auth
 {
@@ -48,7 +49,7 @@ namespace MagusAppGateway.Auth
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
                 options.EmitStaticAudienceClaim = true;
-                options.IssuerUri = "https://localhost:5000";
+                //options.IssuerUri = Configuration.GetSection("urls").Value;
             })
                 .AddProfileService<ProfileService>()
                 //Fuck of the test user
@@ -64,7 +65,18 @@ namespace MagusAppGateway.Auth
                 })
             .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
 
-            builder.AddDeveloperSigningCredential();
+            if (Environment.IsDevelopment())
+            {
+                builder.AddDeveloperSigningCredential();
+            }
+            else
+            {
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                builder
+                    .AddSigningCredential(new X509Certificate2(Path.Combine(basePath,
+                    Configuration["Certificates:CerPath"]),
+                    Configuration["Certificates:Password"]));
+            }
         }
 
         public void Configure(IApplicationBuilder app)

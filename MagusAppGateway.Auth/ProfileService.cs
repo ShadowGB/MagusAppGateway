@@ -20,7 +20,7 @@ namespace MagusAppGateway.Auth
                     //set issued claims to return
                     context.IssuedClaims = claims.ToList();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }

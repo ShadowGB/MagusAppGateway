@@ -30,7 +30,9 @@ namespace MagusAppGateway.Services.Services
         public async Task<ResultModel> ApplyToken(ApplyTokenDto applyTokenDto)
         {
             var client = new HttpClient();
-            var disco = await client.GetDiscoveryDocumentAsync(_configuration.GetSection("IdentityAddress").Value);
+            //var disco = await client.GetDiscoveryDocumentAsync(_configuration.GetSection("IdentityAddress").Value);
+            //disco.Policy = new DiscoveryPolicy { RequireHttps = false };
+            var disco = await client.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest { Address = _configuration.GetSection("IdentityAddress").Value, Policy = new DiscoveryPolicy { RequireHttps = false } });
             if (disco.IsError)
             {
                 return new ResultModel(ResultCode.Fail, disco.Error);

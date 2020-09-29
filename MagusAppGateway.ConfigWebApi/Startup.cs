@@ -46,6 +46,7 @@ namespace MagusAppGateway.ConfigWebApi
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
+                    options.RequireHttpsMetadata = false;
                     options.Authority = _configuration.GetSection("IdentityAddress").Value;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {

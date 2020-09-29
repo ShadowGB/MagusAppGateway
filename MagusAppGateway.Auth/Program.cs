@@ -10,7 +10,9 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MagusAppGateway.Auth
 {
@@ -26,12 +28,12 @@ namespace MagusAppGateway.Auth
                 .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 // uncomment to write to Azure diagnostics stream
-                //.WriteTo.File(
-                //    @"D:\home\LogFiles\Application\identityserver.txt",
-                //    fileSizeLimitBytes: 1_000_000,
-                //    rollOnFileSizeLimit: true,
-                //    shared: true,
-                //    flushToDiskInterval: TimeSpan.FromSeconds(1))
+                .WriteTo.File(
+                    @"D:\dentityserver.txt",
+                    fileSizeLimitBytes: 1_000_000,
+                    rollOnFileSizeLimit: true,
+                    shared: true,
+                    flushToDiskInterval: TimeSpan.FromSeconds(1))
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
                 .CreateLogger();
 
@@ -76,6 +78,9 @@ namespace MagusAppGateway.Auth
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    //webBuilder.UseKestrel(options => {
+                    //    options.ListenAnyIP(5000, config => config.UseHttps(new X509Certificate2(File.ReadAllBytes("IS4.pfx"), "123456")));
+                    //});
                 });
     }
 }

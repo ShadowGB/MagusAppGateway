@@ -13,5 +13,6 @@ namespace MagusAppGateway.Services.IServices
         Task<ResultModel> UpdateClient(ClientUpdateDto clientUpdateDto);
 
         Task<ResultModel> CreateClient(ClientCreateDto clientCreateDto);
+
     }
 }

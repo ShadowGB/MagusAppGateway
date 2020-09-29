@@ -116,43 +116,31 @@ namespace MagusAppGateway.Services.Services
                 {
                     Enabled = clientCreateDto.Enabled,
                     ClientId = clientCreateDto.ClientId,
-                    //ProtocolType = clientCreateDto.ProtocolType ?? "oidc",
-                    RequireClientSecret = clientCreateDto.RequireClientSecret ?? true,
+                    RequireClientSecret = true,
                     ClientName = clientCreateDto.ClientName,
-                    Description = clientCreateDto.Description??"",
-                    //ClientUri = clientCreateDto.ClientUri??"",
-                    //LogoUri = clientCreateDto.LogoUri ?? "",
-                    //RequireConsent = clientCreateDto.RequireConsent ?? false,
-                    //AllowRememberConsent = clientCreateDto.AllowRememberConsent ?? true,
-                    AlwaysIncludeUserClaimsInIdToken = clientCreateDto.AlwaysIncludeUserClaimsInIdToken,
-                    //AllowPlainTextPkce = clientCreateDto.AllowPlainTextPkce,
-                    //RequireRequestObject = clientCreateDto.RequireRequestObject,
-                    AllowAccessTokensViaBrowser = clientCreateDto.AllowAccessTokensViaBrowser,
-                    //FrontChannelLogoutUri = clientCreateDto.FrontChannelLogoutUri,
-                    //FrontChannelLogoutSessionRequired = clientCreateDto.FrontChannelLogoutSessionRequired ?? true,
-                    //BackChannelLogoutUri = clientCreateDto.BackChannelLogoutUri,
-                    //BackChannelLogoutSessionRequired = clientCreateDto.BackChannelLogoutSessionRequired ?? true,
-                    AllowOfflineAccess = clientCreateDto.AllowOfflineAccess,
-                    IdentityTokenLifetime = clientCreateDto.IdentityTokenLifetime ?? 300,
-                    AllowedIdentityTokenSigningAlgorithms = clientCreateDto.AllowedIdentityTokenSigningAlgorithms,
+                    Description = clientCreateDto.Description ?? "",
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    AllowAccessTokensViaBrowser=true,
+                    AllowOfflineAccess=true,
+                    IdentityTokenLifetime=300,
                     AccessTokenLifetime = clientCreateDto.AccessTokenLifetime ?? 3600,
-                    AuthorizationCodeLifetime = clientCreateDto.AuthorizationCodeLifetime ?? 300,
+                    AuthorizationCodeLifetime=300,
                     ConsentLifetime = null,
-                    AbsoluteRefreshTokenLifetime = clientCreateDto.AbsoluteRefreshTokenLifetime ?? 2592000,
-                    SlidingRefreshTokenLifetime = clientCreateDto.SlidingRefreshTokenLifetime ?? 1296000,
-                    RefreshTokenUsage = clientCreateDto.RefreshTokenUsage ?? (int)TokenUsage.OneTimeOnly,
-                    UpdateAccessTokenClaimsOnRefresh = clientCreateDto.UpdateAccessTokenClaimsOnRefresh,
-                    RefreshTokenExpiration = clientCreateDto.RefreshTokenExpiration ?? (int)TokenExpiration.Absolute,
+                    AbsoluteRefreshTokenLifetime= 2592000,
+                    SlidingRefreshTokenLifetime= 1296000,
+                    RefreshTokenUsage = (int)TokenUsage.OneTimeOnly,
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    RefreshTokenExpiration = (int)TokenExpiration.Absolute,
                     AccessTokenType = 0,
-                    EnableLocalLogin = clientCreateDto.EnableLocalLogin ?? true,
-                    IncludeJwtId = clientCreateDto.IncludeJwtId,
-                    AlwaysSendClientClaims = clientCreateDto.AlwaysSendClientClaims,
-                    ClientClaimsPrefix = clientCreateDto.ClientClaimsPrefix ?? "client_",
-                    PairWiseSubjectSalt = clientCreateDto.PairWiseSubjectSalt,
+                    EnableLocalLogin = true,
+                    IncludeJwtId = true,
+                    AlwaysSendClientClaims = false,
+                    ClientClaimsPrefix =  "client_",
+                    PairWiseSubjectSalt = null,
                     Created = DateTime.Now,
-                    UserSsoLifetime = clientCreateDto.UserSsoLifetime,
-                    UserCodeType = clientCreateDto.UserCodeType,
-                    DeviceCodeLifetime = clientCreateDto.DeviceCodeLifetime ?? 300,
+                    UserSsoLifetime = null,
+                    UserCodeType = null,
+                    DeviceCodeLifetime = 300,
                     NonEditable = clientCreateDto.NonEditable,
                     ClientSecrets = clientSecrets,
                     AllowedGrantTypes = clientGrantTypes,
@@ -381,11 +369,11 @@ namespace MagusAppGateway.Services.Services
         public async Task<ResultModel> UpdateClient(ClientUpdateDto clientUpdateDto)
         {
             var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientUpdateDto.Id)
-                .Include(x => x.ClientSecrets)
-                .Include(x => x.AllowedGrantTypes)
-                .Include(x => x.RedirectUris)
-                .Include(x => x.PostLogoutRedirectUris)
-                .Include(x => x.AllowedScopes)
+                //.Include(x => x.ClientSecrets)
+                //.Include(x => x.AllowedGrantTypes)
+                //.Include(x => x.RedirectUris)
+                //.Include(x => x.PostLogoutRedirectUris)
+                //.Include(x => x.AllowedScopes)
                 //.Include(x => x.IdentityProviderRestrictions)
                 //.Include(x => x.Claims)
                 .Include(x => x.AllowedCorsOrigins)
@@ -394,47 +382,13 @@ namespace MagusAppGateway.Services.Services
 
             client.Enabled = clientUpdateDto.Enabled;
             client.ClientId = clientUpdateDto.ClientId;
-            //client.ProtocolType = clientUpdateDto.ProtocolType;
-            client.RequireClientSecret = clientUpdateDto.RequireClientSecret;
             client.ClientName = clientUpdateDto.ClientName;
             client.Description = clientUpdateDto.Description;
-            //client.ClientUri = clientUpdateDto.ClientUri;
-            //client.LogoUri = clientUpdateDto.LogoUri;
-            //client.RequireConsent = clientUpdateDto.RequireConsent;
-            //client.AllowRememberConsent = clientUpdateDto.AllowRememberConsent;
-            client.AlwaysIncludeUserClaimsInIdToken = clientUpdateDto.AlwaysIncludeUserClaimsInIdToken;
-            //client.AllowPlainTextPkce = clientUpdateDto.AllowPlainTextPkce;
-            //client.RequireRequestObject = clientUpdateDto.RequireRequestObject;
-            client.AllowAccessTokensViaBrowser = clientUpdateDto.AllowAccessTokensViaBrowser;
-            //client.FrontChannelLogoutUri = clientUpdateDto.FrontChannelLogoutUri;
-            //client.FrontChannelLogoutSessionRequired = clientUpdateDto.FrontChannelLogoutSessionRequired;
-            //client.BackChannelLogoutUri = clientUpdateDto.BackChannelLogoutUri;
-            //client.BackChannelLogoutSessionRequired = clientUpdateDto.BackChannelLogoutSessionRequired;
-            client.AllowOfflineAccess = clientUpdateDto.AllowOfflineAccess;
-            client.IdentityTokenLifetime = clientUpdateDto.IdentityTokenLifetime;
-            client.AllowedIdentityTokenSigningAlgorithms = clientUpdateDto.AllowedIdentityTokenSigningAlgorithms;
             client.AccessTokenLifetime = clientUpdateDto.AccessTokenLifetime;
-            client.AuthorizationCodeLifetime = clientUpdateDto.AuthorizationCodeLifetime;
-            client.AbsoluteRefreshTokenLifetime = clientUpdateDto.AbsoluteRefreshTokenLifetime;
-            client.SlidingRefreshTokenLifetime = clientUpdateDto.SlidingRefreshTokenLifetime;
-            client.RefreshTokenUsage = clientUpdateDto.RefreshTokenUsage;
-            client.UpdateAccessTokenClaimsOnRefresh = clientUpdateDto.UpdateAccessTokenClaimsOnRefresh;
-            client.RefreshTokenExpiration = clientUpdateDto.RefreshTokenExpiration;
-            client.AccessTokenType = 0;
-            client.EnableLocalLogin = clientUpdateDto.EnableLocalLogin;
-            client.IncludeJwtId = clientUpdateDto.IncludeJwtId;
-            client.AlwaysSendClientClaims = clientUpdateDto.AlwaysSendClientClaims;
-            client.ClientClaimsPrefix = clientUpdateDto.ClientClaimsPrefix;
-            client.PairWiseSubjectSalt = clientUpdateDto.PairWiseSubjectSalt;
             client.Updated = DateTime.Now;
-            client.LastAccessed = clientUpdateDto.LastAccessed;
-            //client.RequirePkce = clientUpdateDto.RequirePkce;
-            client.UserSsoLifetime = clientUpdateDto.UserSsoLifetime;
-            client.UserCodeType = clientUpdateDto.UserCodeType;
-            client.DeviceCodeLifetime = clientUpdateDto.DeviceCodeLifetime;
             client.NonEditable = clientUpdateDto.NonEditable;
 
-            List<ClientIdPRestriction> clientIdPRestrictions = new List<ClientIdPRestriction>();
+            //List<ClientIdPRestriction> clientIdPRestrictions = new List<ClientIdPRestriction>();
             //foreach (var item in clientUpdateDto.IdentityProviderRestrictions)
             //{
             //    clientIdPRestrictions.Add(new ClientIdPRestriction
@@ -453,14 +407,14 @@ namespace MagusAppGateway.Services.Services
             //    });
             //}
 
-            List<ClientCorsOrigin> clientCorsOrigins = new List<ClientCorsOrigin>();
-            foreach (var item in clientUpdateDto.AllowedCorsOrigins)
-            {
-                clientCorsOrigins.Add(new ClientCorsOrigin
-                {
-                    Origin = item.Origin
-                });
-            }
+            //List<ClientCorsOrigin> clientCorsOrigins = new List<ClientCorsOrigin>();
+            //foreach (var item in clientUpdateDto.AllowedCorsOrigins)
+            //{
+            //    clientCorsOrigins.Add(new ClientCorsOrigin
+            //    {
+            //        Origin = item.Origin
+            //    });
+            //}
 
             //List<ClientProperty> clientProperties = new List<ClientProperty>();
             //foreach (var item in clientUpdateDto.Properties)
@@ -472,63 +426,63 @@ namespace MagusAppGateway.Services.Services
             //    });
             //}
 
-            List<ClientScope> clientScopes = new List<ClientScope>();
-            foreach (var item in clientUpdateDto.AllowedScopes)
-            {
-                clientScopes.Add(new ClientScope
-                {
-                    Scope = item.Scope
-                });
-            }
+            //List<ClientScope> clientScopes = new List<ClientScope>();
+            //foreach (var item in clientUpdateDto.AllowedScopes)
+            //{
+            //    clientScopes.Add(new ClientScope
+            //    {
+            //        Scope = item.Scope
+            //    });
+            //}
 
-            List<ClientSecret> clientSecrets = new List<ClientSecret>();
-            foreach (var item in clientUpdateDto.ClientSecrets)
-            {
-                clientSecrets.Add(new ClientSecret
-                {
-                    Created = DateTime.Now,
-                    Description = item.Description,
-                    Expiration = item.Expiration,
-                    Type = "SharedSecret",
-                    Value = item.Value.ToSha256(),
-                });
-            }
+            //List<ClientSecret> clientSecrets = new List<ClientSecret>();
+            //foreach (var item in clientUpdateDto.ClientSecrets)
+            //{
+            //    clientSecrets.Add(new ClientSecret
+            //    {
+            //        Created = DateTime.Now,
+            //        Description = item.Description,
+            //        Expiration = item.Expiration,
+            //        Type = "SharedSecret",
+            //        Value = item.Value.ToSha256(),
+            //    });
+            //}
 
-            List<ClientGrantType> clientGrantTypes = new List<ClientGrantType>();
-            foreach (var item in clientUpdateDto.AllowedGrantTypes)
-            {
-                clientGrantTypes.Add(new ClientGrantType
-                {
-                    GrantType = item.GrantType
-                });
-            }
+            //List<ClientGrantType> clientGrantTypes = new List<ClientGrantType>();
+            //foreach (var item in clientUpdateDto.AllowedGrantTypes)
+            //{
+            //    clientGrantTypes.Add(new ClientGrantType
+            //    {
+            //        GrantType = item.GrantType
+            //    });
+            //}
 
-            List<ClientRedirectUri> clientRedirectUris = new List<ClientRedirectUri>();
-            foreach (var item in clientUpdateDto.RedirectUris)
-            {
-                clientRedirectUris.Add(new ClientRedirectUri
-                {
-                    RedirectUri = item.RedirectUri
-                });
-            }
+            //List<ClientRedirectUri> clientRedirectUris = new List<ClientRedirectUri>();
+            //foreach (var item in clientUpdateDto.RedirectUris)
+            //{
+            //    clientRedirectUris.Add(new ClientRedirectUri
+            //    {
+            //        RedirectUri = item.RedirectUri
+            //    });
+            //}
 
-            List<ClientPostLogoutRedirectUri> clientPostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>();
-            foreach (var item in clientUpdateDto.PostLogoutRedirectUris)
-            {
-                clientPostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri
-                {
-                    PostLogoutRedirectUri = item.PostLogoutRedirectUri
-                });
-            }
+            //List<ClientPostLogoutRedirectUri> clientPostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>();
+            //foreach (var item in clientUpdateDto.PostLogoutRedirectUris)
+            //{
+            //    clientPostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri
+            //    {
+            //        PostLogoutRedirectUri = item.PostLogoutRedirectUri
+            //    });
+            //}
 
 
-            client.ClientSecrets = clientSecrets;
-            client.AllowedGrantTypes = clientGrantTypes;
-            client.RedirectUris = clientRedirectUris;
-            client.PostLogoutRedirectUris = clientPostLogoutRedirectUris;
-            client.AllowedScopes = clientScopes;
-            client.IdentityProviderRestrictions = clientIdPRestrictions;
-            client.AllowedCorsOrigins = clientCorsOrigins;
+            //client.ClientSecrets = clientSecrets;
+            //client.AllowedGrantTypes = clientGrantTypes;
+            //client.RedirectUris = clientRedirectUris;
+            //client.PostLogoutRedirectUris = clientPostLogoutRedirectUris;
+            //client.AllowedScopes = clientScopes;
+            //client.IdentityProviderRestrictions = clientIdPRestrictions;
+            //client.AllowedCorsOrigins = clientCorsOrigins;
             //client.Properties = clientProperties;
             //client.Claims = clientClaims;
 
