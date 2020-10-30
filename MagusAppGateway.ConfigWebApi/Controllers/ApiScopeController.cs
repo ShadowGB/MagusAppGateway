@@ -8,7 +8,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ApiScopeController : Controller
     {
         private readonly IApiScopeService _apiScopeService;

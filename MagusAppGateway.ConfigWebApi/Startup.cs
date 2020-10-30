@@ -43,6 +43,10 @@ namespace MagusAppGateway.ConfigWebApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "配置中心", Version = "v1"});
             });
 
+            services.AddCors(options =>
+            options.AddPolicy("cors",
+            p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
@@ -68,13 +72,13 @@ namespace MagusAppGateway.ConfigWebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors("cors");
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "配置中心");
             });
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
