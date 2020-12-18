@@ -4,7 +4,7 @@ using MagusAppGateway.Models;
 
 namespace MagusAppGateway.Contexts
 {
-    public class UserDatabaseContext:DbContext
+    public class UserDatabaseContext : DbContext
     {
         public UserDatabaseContext(DbContextOptions<UserDatabaseContext> options) : base(options)
         {
@@ -31,6 +31,9 @@ namespace MagusAppGateway.Contexts
             modelBuilder.Entity<ClientGrantType>().HasOne(x => x.Client).WithMany(x => x.AllowedGrantTypes).HasForeignKey(x => x.ClientId);
             modelBuilder.Entity<ClientRedirectUri>().HasOne(x => x.Client).WithMany(x => x.RedirectUris).HasForeignKey(x => x.ClientId);
             modelBuilder.Entity<ClientPostLogoutRedirectUri>().HasOne(x => x.Client).WithMany(x => x.PostLogoutRedirectUris).HasForeignKey(x => x.ClientId);
+            //Ocelot
+            modelBuilder.Entity<DownstreamHostAndPorts>().HasOne(x => x.Routes).WithMany(x => x.DownstreamHostAndPorts).HasForeignKey(x => x.RoutesGuid);
+            modelBuilder.Entity<Routes>().HasOne(x => x.OcelotConfig).WithMany(x => x.Routes).HasForeignKey(x => x.OcelotConfigGuid);
 
 
         }
@@ -72,7 +75,21 @@ namespace MagusAppGateway.Contexts
 
         public DbSet<ClientRedirectUri> ClientRedirectUris { get; set; }
 
-        public DbSet<ClientPostLogoutRedirectUri> ClientPostLogoutRedirectUris { get; set; } 
+        public DbSet<ClientPostLogoutRedirectUri> ClientPostLogoutRedirectUris { get; set; }
+        #endregion
+
+        #region Ocelot配置
+        public DbSet<OcelotConfig> ocelotConfigs { get; set; }
+
+        public DbSet<GlobalConfiguration> globalConfigurations { get; set; }
+
+        public DbSet<Routes> Routes { get; set; }
+
+        public DbSet<LoadBalancerOption> LoadBalancerOptions { get; set; }
+
+        public DbSet<AuthenticationOptions> AuthenticationOptions { get; set; }
+
+        public DbSet<DownstreamHostAndPorts> DownstreamHostAndPorts { get; set; } 
         #endregion
     }
 }

@@ -1,16 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MagusAppGateway.Contexts\MagusAppGateway.Contexts.csproj" />
     <ProjectReference Include="..\MagusAppGateway.Models\MagusAppGateway.Models.csproj" />
+    <ProjectReference Include="..\MagusAppGateway.Util\MagusAppGateway.Util.csproj" />
   </ItemGroup>
 
 </Project>

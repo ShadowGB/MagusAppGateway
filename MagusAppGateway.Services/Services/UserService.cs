@@ -11,6 +11,7 @@ using IdentityModel.Client;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using MagusAppGateway.Util;
 
 namespace MagusAppGateway.Services.Services
 {
@@ -64,6 +65,7 @@ namespace MagusAppGateway.Services.Services
             var resultStatus = new ResultStatus();
             try
             {
+                userCreateDto.Password = MD5Helper.GetMD5Hash(userCreateDto.Password);
                 var users = new Users();
                 _mapper.Map(userCreateDto, users);
                 users.Id = Guid.NewGuid();
@@ -178,7 +180,7 @@ namespace MagusAppGateway.Services.Services
                 {
                     return new ResultModel(ResultCode.Fail, "请填写密码");
                 }
-                var user = _userDatabaseContext.Users.FirstOrDefault(x => x.Username == userLoginDto.Username && x.Password == userLoginDto.Password);
+                var user = _userDatabaseContext.Users.FirstOrDefault(x => x.Username == userLoginDto.Username && x.Password == MD5Helper.GetMD5Hash(userLoginDto.Password));
                 if (user != null)
                 {
                     if (user.Enabled == false)
@@ -212,6 +214,7 @@ namespace MagusAppGateway.Services.Services
             try
             {
                 var user = _userDatabaseContext.Users.FirstOrDefault(x => x.Id == userUpdateDto.Id);
+                userUpdateDto.Password = MD5Helper.GetMD5Hash(userUpdateDto.Password);
                 _mapper.Map(userUpdateDto, user);
                 _userDatabaseContext.Users.Update(user);
                 await _userDatabaseContext.SaveChangesAsync();
