@@ -8,8 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
-using System.Linq;
 using MagusAppGateway.Gateway.Extensions;
 
 namespace MagusAppGateway.Gateway
@@ -33,22 +31,7 @@ namespace MagusAppGateway.Gateway
                     sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
             }, ServiceLifetime.Singleton);
             services.AddOcelot().AddOcelotDbConfig(x => x.DbConnectionStrings = connectionString);
-            var ocelotConfigModel = OcelotConfigJsonToModel.OcelotConfigJsonCoverToModel();
-            if (ocelotConfigModel != null)
-            {
-                foreach (var item in ocelotConfigModel.Routes)
-                {
-                    if (item.AuthenticationOptions != null)
-                    {
-                        services.AddAuthentication().AddIdentityServerAuthentication(item.AuthenticationOptions.AuthenticationProviderKey, options =>
-                        {
-                            options.Authority = Configuration.GetSection("IdentityAddress").Value;
-                            options.RequireHttpsMetadata = false;
-                            options.SupportedTokens = SupportedTokens.Both;
-                        });
-                    }
-                }
-            }
+            services.AddPostgerSQLAuth(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

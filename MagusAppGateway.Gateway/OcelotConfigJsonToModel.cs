@@ -11,6 +11,7 @@ namespace MagusAppGateway.Gateway
 {
     public static class OcelotConfigJsonToModel
     {
+
         public static OcelotConfigModel OcelotConfigJsonCoverToModel()
         {
             string json = GetFileJson("ocelot.json");
