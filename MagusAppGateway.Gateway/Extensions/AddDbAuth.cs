@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MagusAppGateway.Contexts;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
@@ -13,7 +10,7 @@ namespace MagusAppGateway.Gateway.Extensions
 {
     public static class AddDbAuth
     {
-        public static IServiceCollection AddPostgerSQLAuth(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
             // 构建一个服务的提供程序
             var provider = services.BuildServiceProvider();

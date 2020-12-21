@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MagusAppGateway.Gateway.Extensions
+﻿namespace MagusAppGateway.Gateway.Extensions
 {
     public class OcelotDbConfiguration
     {

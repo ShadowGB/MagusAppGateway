@@ -31,7 +31,7 @@ namespace MagusAppGateway.Gateway
                     sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
             }, ServiceLifetime.Singleton);
             services.AddOcelot().AddOcelotDbConfig(x => x.DbConnectionStrings = connectionString);
-            services.AddPostgerSQLAuth(Configuration);
+            services.AddAuth(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using Ocelot.Configuration.Repository;
 using Ocelot.DependencyInjection;
 using System;
-using Microsoft.Extensions.Configuration;
 
 namespace MagusAppGateway.Gateway.Extensions
 {
