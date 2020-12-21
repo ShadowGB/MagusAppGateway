@@ -15,7 +15,7 @@ namespace MagusAppGateway.Models
             Routes = new List<Routes>();
         }
 
-        [Required]
+        [Key]
         public Guid Guid { get; set; }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace MagusAppGateway.Models
     /// </summary>
     public class GlobalConfiguration
     {
-        [Required]
+        [Key]
         public Guid Guid { get; set; }
         /// <summary>
         /// 网关地址
@@ -62,10 +62,10 @@ namespace MagusAppGateway.Models
         public Routes()
         {
             DownstreamHostAndPorts = new List<DownstreamHostAndPorts>();
-            UpstreamHttpMethod = new List<string>();
+            UpstreamHttpMethods = new List<UpstreamHttpMethods>();
         }
 
-        [Required]
+        [Key]
         public Guid Guid { get; set; }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace MagusAppGateway.Models
         /// </summary>
         public List<DownstreamHostAndPorts> DownstreamHostAndPorts { get; set; }
 
-        public List<string> UpstreamHttpMethod { get; set; }
+        public List<UpstreamHttpMethods> UpstreamHttpMethods { get; set; }
 
         /// <summary>
         /// 是否区分大小写
@@ -121,8 +121,7 @@ namespace MagusAppGateway.Models
     /// </summary>
     public class LoadBalancerOption
     {
-
-        [Required]
+        [Key]
         public Guid Guid { get; set; }
 
         /// <summary>
@@ -140,12 +139,12 @@ namespace MagusAppGateway.Models
     /// </summary>
     public class AuthenticationOptions
     {
-        public AuthenticationOptions()
-        {
-            AllowedScopes = new List<string>();
-        }
+        //public AuthenticationOptions()
+        //{
+        //    AllowedScopes = new List<string>();
+        //}
 
-        [Required]
+        [Key]
         public Guid Guid { get; set; }
 
         /// <summary>
@@ -156,7 +155,7 @@ namespace MagusAppGateway.Models
         /// <summary>
         /// 可以访问的APIScope，不用填
         /// </summary>
-        public List<string> AllowedScopes { get; set; }
+        //public List<string> AllowedScopes { get; set; }
 
         public Guid RoutesGuid { get; set; }
 
@@ -168,9 +167,7 @@ namespace MagusAppGateway.Models
     /// </summary>
     public class DownstreamHostAndPorts
     {
-
-
-        [Required]
+        [Key]
         public Guid Guid { get; set; }
 
         /// <summary>
@@ -182,6 +179,18 @@ namespace MagusAppGateway.Models
         /// 端口
         /// </summary>
         public int Port { get; set; }
+
+        public Guid RoutesGuid { get; set; }
+
+        public Routes Routes { get; set; }
+    }
+
+    public class UpstreamHttpMethods
+    {
+        [Key]
+        public Guid Guid { get; set; }
+
+        public string Method { get; set; }
 
         public Guid RoutesGuid { get; set; }
 

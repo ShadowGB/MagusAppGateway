@@ -1,6 +1,8 @@
 using IdentityServer4.AccessTokenValidation;
+using MagusAppGateway.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,21 +10,29 @@ using Microsoft.IdentityModel.Logging;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using System.Linq;
+using MagusAppGateway.Gateway.Extensions;
 
 namespace MagusAppGateway.Gateway
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOcelot();
+            var connectionString = _configuration.GetConnectionString("DBConnection");
+            services.AddDbContext<UserDatabaseContext>(options => {
+                options.UseNpgsql(connectionString,
+                    sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
+            }, ServiceLifetime.Singleton);
+            services.AddOcelot().AddOcelotDbConfig(x => x.DbConnectionStrings = connectionString);
             var ocelotConfigModel = OcelotConfigJsonToModel.OcelotConfigJsonCoverToModel();
             if (ocelotConfigModel != null)
             {
@@ -50,7 +60,7 @@ namespace MagusAppGateway.Gateway
 
             IdentityModelEventSource.ShowPII = true;
             app.UseAuthentication();
-            app.UseOcelot().Wait();
+            app.UsePostgreSQLOcelot().Wait();
         }
     }
 }
