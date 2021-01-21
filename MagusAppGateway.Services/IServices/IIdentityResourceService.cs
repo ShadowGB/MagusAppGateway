@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using MagusAppGateway.Services.Result;
 using MagusAppGateway.Models.Dtos;
+using MagusAppGateway.Util.Result;
 
 namespace MagusAppGateway.Services.IServices
 {

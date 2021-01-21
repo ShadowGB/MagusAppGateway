@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MagusAppGateway.Models
 {
@@ -12,5 +13,7 @@ namespace MagusAppGateway.Models
 
         [Required]
         public bool Enabled { get; set; }
+
+        public List<UserRole> UserRoles { get; set; }
     }
 }

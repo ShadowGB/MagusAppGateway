@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MagusAppGateway.Services.IServices;
 using AutoMapper;
-using MagusAppGateway.Services.Result;
 using MagusAppGateway.Contexts;
 using MagusAppGateway.Models.Dtos;
 using MagusAppGateway.Models;
@@ -12,19 +11,19 @@ using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using MagusAppGateway.Util;
+using Microsoft.EntityFrameworkCore;
+using MagusAppGateway.Util.Result;
 
 namespace MagusAppGateway.Services.Services
 {
     public class UserService : IUserService
     {
         private readonly UserDatabaseContext _userDatabaseContext;
-        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public UserService(UserDatabaseContext userDatabaseContext,IMapper mapper, IConfiguration configuration)
+        public UserService(UserDatabaseContext userDatabaseContext,IConfiguration configuration)
         {
             _userDatabaseContext = userDatabaseContext;
-            _mapper = mapper;
             _configuration = configuration;
         }
 
@@ -59,16 +58,33 @@ namespace MagusAppGateway.Services.Services
             return new ResultModel(ResultCode.Success, tokenModel);
         }
 
-        public async Task<ResultModel> CreateUser(UserCreateDto userCreateDto)
+        public async Task<ResultModel> CreateUser(UserEditDto userCreateDto)
         {
+            if (string.IsNullOrWhiteSpace(userCreateDto.Username))
+            {
+                return new ResultModel(ResultCode.Fail, "请输入用户名");
+            }
+            if (string.IsNullOrWhiteSpace(userCreateDto.Password))
+            {
+                return new ResultModel(ResultCode.Fail, "请输入密码");
+            }
+            if(userCreateDto.Enabled==null)
+            {
+                return new ResultModel(ResultCode.Fail, "请输入是否启用");
+            }
+            if (_userDatabaseContext.Users.Any(x => x.Username == userCreateDto.Username))
+            {
+                return new ResultModel(ResultCode.Fail, "此用户已存在");
+            }
             var result = new ResultModel();
             var resultStatus = new ResultStatus();
             try
             {
-                userCreateDto.Password = MD5Helper.GetMD5Hash(userCreateDto.Password);
                 var users = new Users();
-                _mapper.Map(userCreateDto, users);
+                users.Password = MD5Helper.GetMD5Hash(userCreateDto.Password);
+                users.Username = userCreateDto.Username;
                 users.Id = Guid.NewGuid();
+                users.Enabled = userCreateDto.Enabled.Value;
                 _userDatabaseContext.Users.Add(users);
                 await _userDatabaseContext.SaveChangesAsync();
                 resultStatus.text = "创建用户成功";
@@ -133,14 +149,30 @@ namespace MagusAppGateway.Services.Services
         public async Task<ResultModel> GetById(Guid id)
         {
            return await Task.Run(()=> {
-                var user = _userDatabaseContext.Users.FirstOrDefault(x => x.Id == id);
+               var user = _userDatabaseContext.Users.Select(x => new UserDto
+               {
+                   UserId = x.Id.ToString(),
+                   Username = x.Username,
+                   Enabled = x.Enabled
+               }).FirstOrDefault(x => x.UserId == id.ToString());
                 if (user == null)
                 {
                     return new ResultModel(ResultCode.Fail, "没有对应用户");
                 }
                 return new ResultModel(ResultCode.Success, user);
             });
+        }
 
+        public async Task<ResultModel> GetByName(string username)
+        {
+            return await Task.Run(() => {
+                var user = _userDatabaseContext.Users.FirstOrDefault(x => x.Username == username);
+                if (user == null)
+                {
+                    return new ResultModel(ResultCode.Fail, "没有对应用户");
+                }
+                return new ResultModel(ResultCode.Success, user);
+            });
         }
 
         public async Task<ResultModel> GetUsers(UserQueryDto userQueryDto)
@@ -158,8 +190,16 @@ namespace MagusAppGateway.Services.Services
                     {
                         query = query.Where(x => x.Username.Contains(userQueryDto.Username));
                     }
-                    var list = query.ToList();
-                    return new ResultModel(ResultCode.Success, list);
+                    //后面要做根据条件排序
+                    query = query.OrderBy(x => x.Username);
+                    var list = query.Select(x => new UserDto
+                    {
+                        UserId = x.Id.ToString(),
+                        Username = x.Username,
+                        Enabled = x.Enabled
+                    });
+                    var page = PagedList<UserDto>.ToPagedList(list, userQueryDto.CurrentPage, userQueryDto.PageSize);
+                    return new ResultModel(ResultCode.Success, page);
                 }
                 catch (Exception ex)
                 {
@@ -197,9 +237,9 @@ namespace MagusAppGateway.Services.Services
             });
         }
 
-        public async Task<ResultModel> UpdateUser(UserUpdateDto userUpdateDto)
+        public async Task<ResultModel> UpdateUser(UserEditDto userUpdateDto)
         {
-            if (userUpdateDto.Id == null)
+            if (userUpdateDto.UserId == null)
             {
                 return new ResultModel(ResultCode.Fail, "请输入用户编号");
             }
@@ -207,15 +247,20 @@ namespace MagusAppGateway.Services.Services
             {
                 return new ResultModel(ResultCode.Fail, "请输入用户名");
             }
-            if (string.IsNullOrWhiteSpace(userUpdateDto.Password))
+            if (_userDatabaseContext.Users.Any(x => x.Username == userUpdateDto.Username && x.Id != userUpdateDto.UserId))
             {
-                return new ResultModel(ResultCode.Fail, "请输入密码");
+                return new ResultModel(ResultCode.Fail, "此用户已存在");
             }
+            //if (string.IsNullOrWhiteSpace(userUpdateDto.Password))
+            //{
+            //    return new ResultModel(ResultCode.Fail, "请输入密码");
+            //}
             try
             {
-                var user = _userDatabaseContext.Users.FirstOrDefault(x => x.Id == userUpdateDto.Id);
-                userUpdateDto.Password = MD5Helper.GetMD5Hash(userUpdateDto.Password);
-                _mapper.Map(userUpdateDto, user);
+                var user = _userDatabaseContext.Users.FirstOrDefault(x => x.Id == userUpdateDto.UserId);
+                //userUpdateDto.Password = MD5Helper.GetMD5Hash(userUpdateDto.Password);
+                user.Username = userUpdateDto.Username;
+                user.Enabled = userUpdateDto.Enabled.Value;
                 _userDatabaseContext.Users.Update(user);
                 await _userDatabaseContext.SaveChangesAsync();
                 return new ResultModel(ResultCode.Success, "更新用户成功");

@@ -6,6 +6,6 @@ namespace MagusAppGateway.Models.Dtos
     {
         public int ClientId { get; set; }
 
-        public List<ClientGrantTypeCreateDto> clientGrantTypeCreateDtos { get; set; }
+        public List<ClientGrantTypeEditDto> clientGrantTypeEditDtos { get; set; }
     }
 }

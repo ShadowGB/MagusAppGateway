@@ -1,0 +1,30 @@
+﻿@page "/clientlist"
+@attribute [Authorize]
+
+<Table TItem="ClientDto"
+       IsPagination="true" PageItemsSource="@PageItemsSource"
+       SearchModel="@SearchModel" ShowDefaultButtons="true" ShowEditButton="true" ShowDeleteButton="false"
+       ShowLineNo="true" IsBordered="true" ShowExtendButtons="true" OnQueryAsync="@OnQueryAsync"
+       ShowToolbar="true" ShowSearch="true" ShowAddButton="true"
+       AddModalTitle="新增用户" EditModalTitle="编辑用户"
+       TableSize="TableSize.Compact" IsStriped="true" 
+       @bind-SelectedRows="@SelectedRows" ClickToSelect="true">
+    <TableColumns>
+        <TableColumn @bind-Field="@context.Id" />
+        <TableColumn @bind-Field="@context.ClientId" />
+        <TableColumn @bind-Field="@context.Enabled" Searchable="true">
+            <Template Context="v">
+                <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
+            </Template>
+        </TableColumn>
+        <TableColumn @bind-Field="@context.RequireClientSecret" Searchable="true">
+            <Template Context="v">
+                <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
+            </Template>
+        </TableColumn>
+        <TableColumn @bind-Field="@context.ClientName" />
+        <TableColumn @bind-Field="@context.AccessTokenLifetime" />
+        <TableColumn @bind-Field="@context.Created" />
+        <TableColumn @bind-Field="@context.Updated" />
+    </TableColumns>
+</Table>

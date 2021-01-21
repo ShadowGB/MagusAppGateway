@@ -1,15 +1,18 @@
-﻿using System;
+﻿#define DEBUG
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MagusAppGateway.Services.IServices;
 using MagusAppGateway.Models.Dtos;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace MagusAppGateway.ConfigWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
@@ -20,7 +23,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody]UserCreateDto dto)
+        public async Task<IActionResult> CreateUser([FromBody]UserEditDto dto)
         {
             return Json(await _userService.CreateUser(dto));
         }
@@ -43,20 +46,18 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
             return Json(await _userService.GetById(id));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetUsers([FromQuery]UserQueryDto dto)
+        [HttpPost]
+        public async Task<IActionResult> GetUsers([FromBody]UserQueryDto dto)
         {
             return Json(await _userService.GetUsers(dto));
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateUser([FromBody]UserUpdateDto dto)
+        public async Task<IActionResult> UpdateUser([FromBody]UserEditDto dto)
         {
             return Json(await _userService.UpdateUser(dto));
         }
 
-
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> ApplyToken([FromBody]ApplyTokenDto dto)
         {

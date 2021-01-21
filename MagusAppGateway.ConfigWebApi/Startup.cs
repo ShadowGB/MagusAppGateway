@@ -11,6 +11,7 @@ using MagusAppGateway.Services.Services;
 using MagusAppGateway.Services.IServices;
 using MagusAppGateway.Services.Automapper;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace MagusAppGateway.ConfigWebApi
 {
@@ -30,12 +31,13 @@ namespace MagusAppGateway.ConfigWebApi
             services.AddDbContext<UserDatabaseContext>(options => {
                 options.UseNpgsql(connectionString, 
                     sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
-            },ServiceLifetime.Singleton);
+            });
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityResourceService, IdentityResourceService>();
             services.AddScoped<IApiScopeService, ApiScopeService>();
             services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IRoleService, RoleService>();
 
             services.AddAutoMapper(typeof(AutomapperConfig));
             services.AddSwaggerGen(c =>
@@ -47,19 +49,23 @@ namespace MagusAppGateway.ConfigWebApi
             options.AddPolicy("cors",
             p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
                     options.RequireHttpsMetadata = false;
                     options.Authority = _configuration.GetSection("IdentityAddress").Value;
+                    options.Audience = $"{_configuration.GetSection("ScopeName").Value}";
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        ValidateIssuer = false
                     };
                 });
 
-            services.AddAuthorization(options => {
-                options.AddPolicy("ApiScope", policy => {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
+                {
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("scope", _configuration.GetSection("ScopeName").Value);
                 });

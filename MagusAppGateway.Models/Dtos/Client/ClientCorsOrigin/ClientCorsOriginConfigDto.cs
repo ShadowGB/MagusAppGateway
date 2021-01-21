@@ -6,6 +6,6 @@ namespace MagusAppGateway.Models.Dtos
     {
         public int ClientId { get; set; }
 
-        public List<ClientCorsOriginCreateDto> clientCorsOriginCreateDtos { get; set; }
+        public List<ClientCorsOriginEditDto> clientCorsOriginEditDtos { get; set; }
     }
 }

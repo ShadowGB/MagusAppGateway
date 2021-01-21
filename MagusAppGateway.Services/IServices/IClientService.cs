@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using MagusAppGateway.Services.Result;
 using MagusAppGateway.Models.Dtos;
 using System.Collections.Generic;
+using MagusAppGateway.Util.Result;
 
 namespace MagusAppGateway.Services.IServices
 {
@@ -11,21 +11,21 @@ namespace MagusAppGateway.Services.IServices
 
         Task<ResultModel> GetById(int id);
 
-        Task<ResultModel> UpdateClient(ClientUpdateDto clientUpdateDto);
+        Task<ResultModel> UpdateClient(ClientEditDto dto);
 
-        Task<ResultModel> CreateClient(ClientCreateDto clientCreateDto);
+        Task<ResultModel> CreateClient(ClientEditDto dto);
 
-        Task<ResultModel> ConfigClientCorsOrigin(List<ClientCorsOriginCreateDto> clientCorsOriginCreateDtos,int clientId);
+        Task<ResultModel> ConfigClientCorsOrigin(List<ClientCorsOriginEditDto> clientCorsOriginEditDtos,int clientId);
 
-        Task<ResultModel> ConfigClientGrantType(List<ClientGrantTypeCreateDto> clientGrantTypeCreateDtos, int clientId);
+        Task<ResultModel> ConfigClientGrantType(List<ClientGrantTypeEditDto> clientGrantTypeEditDtos, int clientId);
 
-        Task<ResultModel> ConfigClientPostLogoutRedirectUri(List<ClientPostLogoutRedirectUriCreateDto> clientPostLogoutRedirectUriCreateDtos, int clientId);
+        Task<ResultModel> ConfigClientPostLogoutRedirectUri(List<ClientPostLogoutRedirectUriEditDto> clientPostLogoutRedirectUriEditDtos, int clientId);
 
-        Task<ResultModel> ConfigClientRedirectUri(List<ClientRedirectUriCreateDto> clientRedirectUriCreateDtos, int clientId);
+        Task<ResultModel> ConfigClientRedirectUri(List<ClientRedirectUriEditDto> clientRedirectUriEditDtos, int clientId);
 
-        Task<ResultModel> ConfigClientScope(List<ClientScopeCreateDto> clientScopeCreateDtos, int clientId);
+        Task<ResultModel> ConfigClientScope(List<ClientScopeEditDto> clientScopeEditDtos, int clientId);
 
-        Task<ResultModel> ConfigClientSecret(List<ClientSecretCreateDto> clientSecretCreateDtos, int clientId);
+        Task<ResultModel> ConfigClientSecret(List<ClientSecretEditDto> clientSecretEditDtos, int clientId);
 
     }
 }

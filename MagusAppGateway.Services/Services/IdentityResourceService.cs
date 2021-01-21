@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MagusAppGateway.Services.IServices;
-using MagusAppGateway.Services.Result;
 using IdentityServer4.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using MagusAppGateway.Contexts;
 using MagusAppGateway.Models.Dtos;
+using MagusAppGateway.Util.Result;
 
 namespace MagusAppGateway.Services.Services
 {

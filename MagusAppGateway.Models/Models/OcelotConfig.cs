@@ -8,15 +8,12 @@ namespace MagusAppGateway.Models
     /// <summary>
     /// 网关配置主表
     /// </summary>
-    public class OcelotConfig
+    public class OcelotConfig:BaseModel
     {
         public OcelotConfig()
         {
             Routes = new List<Routes>();
         }
-
-        [Key]
-        public Guid Guid { get; set; }
 
         /// <summary>
         /// 是否启用
@@ -38,10 +35,8 @@ namespace MagusAppGateway.Models
     /// <summary>
     /// 全局配置
     /// </summary>
-    public class GlobalConfiguration
+    public class GlobalConfiguration : BaseModel
     {
-        [Key]
-        public Guid Guid { get; set; }
         /// <summary>
         /// 网关地址
         /// </summary>
@@ -57,7 +52,7 @@ namespace MagusAppGateway.Models
     /// <summary>
     /// 路由配置
     /// </summary>
-    public class Routes
+    public class Routes : BaseModel
     {
         public Routes()
         {
@@ -65,8 +60,6 @@ namespace MagusAppGateway.Models
             UpstreamHttpMethods = new List<UpstreamHttpMethods>();
         }
 
-        [Key]
-        public Guid Guid { get; set; }
 
         /// <summary>
         /// 下游路径模板
@@ -119,11 +112,8 @@ namespace MagusAppGateway.Models
     /// <summary>
     /// 负载均衡配置
     /// </summary>
-    public class LoadBalancerOption
+    public class LoadBalancerOption : BaseModel
     {
-        [Key]
-        public Guid Guid { get; set; }
-
         /// <summary>
         /// 负载均衡类型(LeastConnection、RoundRobin、NoLoadBalancer、CookieStickySessions)
         /// </summary>
@@ -137,15 +127,12 @@ namespace MagusAppGateway.Models
     /// <summary>
     /// 身份验证配置
     /// </summary>
-    public class AuthenticationOptions
+    public class AuthenticationOptions : BaseModel
     {
         //public AuthenticationOptions()
         //{
         //    AllowedScopes = new List<string>();
         //}
-
-        [Key]
-        public Guid Guid { get; set; }
 
         /// <summary>
         /// APIScope名称
@@ -165,10 +152,8 @@ namespace MagusAppGateway.Models
     /// <summary>
     /// 下游服务配置
     /// </summary>
-    public class DownstreamHostAndPorts
+    public class DownstreamHostAndPorts : BaseModel
     {
-        [Key]
-        public Guid Guid { get; set; }
 
         /// <summary>
         /// 地址
@@ -185,10 +170,8 @@ namespace MagusAppGateway.Models
         public Routes Routes { get; set; }
     }
 
-    public class UpstreamHttpMethods
+    public class UpstreamHttpMethods : BaseModel
     {
-        [Key]
-        public Guid Guid { get; set; }
 
         public string Method { get; set; }
 

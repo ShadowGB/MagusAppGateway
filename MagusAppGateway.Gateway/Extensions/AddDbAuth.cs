@@ -18,7 +18,7 @@ namespace MagusAppGateway.Gateway.Extensions
             var context = provider.GetRequiredService<UserDatabaseContext>();
 
             var ocelotConfig = context.OcelotConfigs.FirstOrDefault(x => x.IsEnable == true);
-            var routes = context.Routes.Where(x => x.OcelotConfigGuid == ocelotConfig.Guid).Include(x => x.AuthenticationOptions);
+            var routes = context.Routes.Where(x => x.OcelotConfigGuid == ocelotConfig.Id).Include(x => x.AuthenticationOptions);
 
             if (routes != null)
             {

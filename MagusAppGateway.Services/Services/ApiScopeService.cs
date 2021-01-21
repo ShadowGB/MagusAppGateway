@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MagusAppGateway.Services.IServices;
-using MagusAppGateway.Services.Result;
 using IdentityServer4.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using MagusAppGateway.Contexts;
 using MagusAppGateway.Models.Dtos;
+using MagusAppGateway.Util.Result;
+using MagusAppGateway.Models;
 
 namespace MagusAppGateway.Services.Services
 {
@@ -20,12 +21,12 @@ namespace MagusAppGateway.Services.Services
             _userDatabaseContext = userDatabaseContext;
         }
 
-        public async Task<ResultModel> CreateApiScope(ApiScopeCreateDto apiScopeCreateDto)
+        public async Task<ResultModel> CreateApiScope(ApiScopeEditDto dto)
         {
             try
             {
                 List<ApiScopeClaim> apiScopeClaims = new List<ApiScopeClaim>();
-                foreach (var item in apiScopeCreateDto.UserClaims)
+                foreach (var item in dto.UserClaims)
                 {
                     apiScopeClaims.Add(new ApiScopeClaim
                     {
@@ -35,13 +36,13 @@ namespace MagusAppGateway.Services.Services
 
                 var apiScope = new ApiScope
                 {
-                    Enabled = apiScopeCreateDto.Enabled,
-                    Name = apiScopeCreateDto.Name,
-                    DisplayName = apiScopeCreateDto.DisplayName,
-                    Description = apiScopeCreateDto.Description,
-                    Required = apiScopeCreateDto.Required,
-                    Emphasize = apiScopeCreateDto.Emphasize,
-                    ShowInDiscoveryDocument = apiScopeCreateDto.ShowInDiscoveryDocument,
+                    Enabled = dto.Enabled,
+                    Name = dto.Name,
+                    DisplayName = dto.DisplayName,
+                    Description = dto.Description,
+                    Required = dto.Required,
+                    Emphasize = dto.Emphasize,
+                    ShowInDiscoveryDocument = dto.ShowInDiscoveryDocument,
                     UserClaims = apiScopeClaims
                 };
 
@@ -121,49 +122,63 @@ namespace MagusAppGateway.Services.Services
 
         public async Task<ResultModel> GetList(ApiScopeQueryDto apiScopeQueryDto)
         {
-            try
-            {
-                var query = _userDatabaseContext.ApiScopes.Where(x => 1 == 1);
-                if (!string.IsNullOrWhiteSpace(apiScopeQueryDto.Name))
+            return await Task.Run(()=> {
+                try
                 {
-                    query = query.Where(x => x.Name.Contains(apiScopeQueryDto.Name));
+                    var query = _userDatabaseContext.ApiScopes.Where(x => 1 == 1);
+                    if (!string.IsNullOrWhiteSpace(apiScopeQueryDto.Name))
+                    {
+                        query = query.Where(x => x.Name.Contains(apiScopeQueryDto.Name));
+                    }
+                    query = query.OrderBy(x => x.Id);
+                    var list = query.Select(x => new ApiScopeDto
+                    {
+                        Id = x.Id,
+                        Enabled = x.Enabled,
+                        Name = x.Name,
+                        DisplayName = x.DisplayName,
+                        Description = x.Description,
+                        Required = x.Required,
+                        Emphasize = x.Emphasize,
+                        ShowInDiscoveryDocument = x.ShowInDiscoveryDocument
+                    });
+                    var page = PagedList<ApiScopeDto>.ToPagedList(list, apiScopeQueryDto.CurrentPage, apiScopeQueryDto.PageSize);
+                    return new ResultModel(ResultCode.Success, page);
                 }
-                var list = await query.ToListAsync();
-                return new ResultModel(ResultCode.Success, list);
-            }
-            catch (Exception ex)
-            {
-                return new ResultModel(ResultCode.Fail, ex.Message);
-            }
-        }
+                catch (Exception ex)
+                {
+                    return new ResultModel(ResultCode.Fail, ex.Message);
+                }
+            });
+        } 
 
-        public async Task<ResultModel> UpdateApiScope(ApiScopeUpdateDto apiScopeUpdateDto)
+        public async Task<ResultModel> UpdateApiScope(ApiScopeEditDto dto)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(apiScopeUpdateDto.Name))
+                if (string.IsNullOrWhiteSpace(dto.Name))
                 {
                     return new ResultModel(ResultCode.Fail, "请输入API域名称");
                 }
-                var apiScope = await _userDatabaseContext.ApiScopes.Where(x => x.Id == apiScopeUpdateDto.Id)
+                var apiScope = await _userDatabaseContext.ApiScopes.Where(x => x.Id == dto.Id)
                     .Include(x => x.UserClaims)
                     .FirstOrDefaultAsync();
 
                 List<ApiScopeClaim> apiScopeClaims = new List<ApiScopeClaim>();
-                foreach (var item in apiScopeUpdateDto.UserClaims)
+                foreach (var item in dto.UserClaims)
                 {
                     apiScopeClaims.Add(new ApiScopeClaim
                     {
                         Type = item.Type
                     });
                 }
-                apiScope.Enabled = apiScopeUpdateDto.Enabled;
-                apiScope.Name = apiScopeUpdateDto.Name;
-                apiScope.DisplayName = apiScopeUpdateDto.DisplayName;
-                apiScope.Description = apiScopeUpdateDto.Description;
-                apiScope.Required = apiScopeUpdateDto.Required;
-                apiScope.Emphasize = apiScopeUpdateDto.Emphasize;
-                apiScope.ShowInDiscoveryDocument = apiScopeUpdateDto.ShowInDiscoveryDocument;
+                apiScope.Enabled = dto.Enabled;
+                apiScope.Name = dto.Name;
+                apiScope.DisplayName = dto.DisplayName;
+                apiScope.Description = dto.Description;
+                apiScope.Required = dto.Required;
+                apiScope.Emphasize = dto.Emphasize;
+                apiScope.ShowInDiscoveryDocument = dto.ShowInDiscoveryDocument;
                 apiScope.UserClaims = apiScopeClaims;
 
                 _userDatabaseContext.ApiScopes.Update(apiScope);

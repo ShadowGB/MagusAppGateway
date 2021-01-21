@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MagusAppGateway.Models.Dtos
 {
-    public class ApiScopeQueryDto
+    public class ApiScopeQueryDto : QueryModelBase
     {
         public bool Enabled { get; set; }
 

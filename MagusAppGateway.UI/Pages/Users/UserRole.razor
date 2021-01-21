@@ -1,0 +1,10 @@
+﻿<Table TItem="UserRoleDto"
+       OnQueryAsync="@OnQueryAsync" Items="userRoleDtos"
+       ShowLineNo="true" IsBordered="true" IsStriped="true" ClickToSelect="true"
+       @bind-SelectedRows="@SelectedRows" IsMultipleSelect="true" TableSize="TableSize.Compact">
+    <TableColumns>
+        <TableColumn @bind-Field="@context.RoleId" />
+        <TableColumn @bind-Field="@context.RoleName" />
+    </TableColumns>
+</Table>
+<Button Icon="fa fa-save" Text="提交" OnClick="SetRole"/>

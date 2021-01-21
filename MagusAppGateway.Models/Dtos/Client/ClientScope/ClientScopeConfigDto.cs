@@ -6,6 +6,6 @@ namespace MagusAppGateway.Models.Dtos
     {
         public int ClientId { get; set; }
 
-        public List<ClientScopeCreateDto> clientScopeCreateDtos { get; set; }
+        public List<ClientScopeEditDto> clientScopeEditDtos { get; set; }
     }
 }

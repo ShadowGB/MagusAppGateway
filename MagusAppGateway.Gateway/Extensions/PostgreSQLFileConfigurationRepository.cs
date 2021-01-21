@@ -32,7 +32,7 @@ namespace MagusAppGateway.Gateway.Extensions
             if (configModel != null)
             {
                 //全局配置
-                var guid = configModel.Guid;
+                var guid = configModel.Id;
                 //var routes = _userDatabaseContext.Routes.Where(x => x.OcelotConfigGuid == guid)
                 //    .Include(x => x.LoadBalancerOption)
                 //    .Include(x => x.DownstreamPathTemplate)
@@ -48,9 +48,9 @@ namespace MagusAppGateway.Gateway.Extensions
                 var routelist = new List<FileRoute>();
                 foreach (var item in routes)
                 {
-                    item.LoadBalancerOption = _userDatabaseContext.LoadBalancerOptions.FirstOrDefault(x => x.RoutesGuid == item.Guid);
-                    item.AuthenticationOptions = _userDatabaseContext.AuthenticationOptions.FirstOrDefault(x => x.RoutesGuid == item.Guid);
-                    item.DownstreamHostAndPorts = _userDatabaseContext.DownstreamHostAndPorts.Where(x => x.RoutesGuid == item.Guid).ToList();
+                    item.LoadBalancerOption = _userDatabaseContext.LoadBalancerOptions.FirstOrDefault(x => x.RoutesGuid == item.Id);
+                    item.AuthenticationOptions = _userDatabaseContext.AuthenticationOptions.FirstOrDefault(x => x.RoutesGuid == item.Id);
+                    item.DownstreamHostAndPorts = _userDatabaseContext.DownstreamHostAndPorts.Where(x => x.RoutesGuid == item.Id).ToList();
 
                     var m = new FileRoute();
                     m.DownstreamPathTemplate = item.DownstreamPathTemplate;

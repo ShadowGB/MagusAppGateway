@@ -8,7 +8,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ApiScopeController : Controller
     {
         private readonly IApiScopeService _apiScopeService;
@@ -19,7 +19,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateApiScope([FromBody]ApiScopeCreateDto dto)
+        public async Task<IActionResult> CreateApiScope([FromBody]ApiScopeEditDto dto)
         {
             return Json(await _apiScopeService.CreateApiScope(dto));
         }
@@ -30,14 +30,14 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
             return Json(await _apiScopeService.GetById(id));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetList([FromQuery]ApiScopeQueryDto dto)
+        [HttpPost]
+        public async Task<IActionResult> GetList([FromBody]ApiScopeQueryDto dto)
         {
             return Json(await _apiScopeService.GetList(dto));
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateIdentityResource([FromBody]ApiScopeUpdateDto dto)
+        public async Task<IActionResult> UpdateApiScope([FromBody]ApiScopeEditDto dto)
         {
             return Json(await _apiScopeService.UpdateApiScope(dto));
         }

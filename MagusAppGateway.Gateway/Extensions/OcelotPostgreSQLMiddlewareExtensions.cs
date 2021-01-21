@@ -11,7 +11,6 @@ using Ocelot.Configuration.Repository;
 using Ocelot.Responses;
 using Microsoft.AspNetCore.Hosting;
 using System.Diagnostics;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace MagusAppGateway.Gateway.Extensions
 {

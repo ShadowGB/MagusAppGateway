@@ -1,0 +1,54 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">网关平台管理端</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+<AuthorizeView>
+    <Authorized>
+        <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+            <ul class="nav flex-column">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="fa fa-home fa-fw" aria-hidden="true"></span> 返回主页
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="userlist">
+                        <span class="fa fa-user fa-fw" aria-hidden="true"></span> 用户管理
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="rolelist">
+                        <span class="fa fa-indent fa-fw" aria-hidden="true"></span> 角色管理
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="apilist">
+                        <span class="fa fa-key fa-fw" aria-hidden="true"></span> API管理
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="clientlist">
+                        <span class="fa fa-laptop fa-fw" aria-hidden="true"></span> 客户端管理
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="ocelotlist">
+                        <span class="fa fa-cog fa-fw" aria-hidden="true"></span> 网关管理
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
+    </Authorized>
+</AuthorizeView>
+    @code {
+        private bool collapseNavMenu = true;
+
+        private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+        private void ToggleNavMenu()
+        {
+            collapseNavMenu = !collapseNavMenu;
+        }
+    }

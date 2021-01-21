@@ -1,0 +1,68 @@
+﻿@page "/userlist"
+@attribute [Authorize]
+
+<Table TItem="UserDto"
+       IsPagination="true" PageItemsSource="@PageItemsSource"
+       SearchModel="@SearchModel" ShowDefaultButtons="true" ShowEditButton="true" ShowDeleteButton="false"
+       ShowLineNo="true" IsBordered="true" ShowExtendButtons="true"
+       ShowToolbar="true" ShowSearch="true" ShowAddButton="true"
+       AddModalTitle="新增用户" EditModalTitle="编辑用户"
+       TableSize="TableSize.Compact" IsStriped="true" OnQueryAsync="@OnQueryAsync"
+       OnResetSearchAsync="@OnResetSearchAsync" OnAddAsync="@OnAddAsync" OnSaveAsync="@OnSaveAsync"
+       @bind-SelectedRows="@SelectedRows" ClickToSelect="true">
+    <TableColumns>
+        <TableColumn @bind-Field="@context.UserId" />
+        <TableColumn @bind-Field="@context.Username" />
+        <TableColumn @bind-Field="@context.Enabled" Searchable="true">
+            <Template Context="v">
+                <Switch IsDisabled="true" Value="v.Value.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
+            </Template>
+        </TableColumn>
+    </TableColumns>
+    <RowButtonTemplate>
+        <TableCellButton Size="Size.ExtraSmall" Color="Color.Info" TItem="UserDto" Item="@context" Icon="fa fa-edit" Text="明细" OnClickCallback="DetailClick" />
+        <TableCellButton Size="Size.ExtraSmall" Color="Color.Warning" TItem="UserDto" Item="@context" Icon="fa fa-edit" Text="设置角色" OnClickCallback="SetRole" />
+    </RowButtonTemplate>
+    <SearchTemplate>
+        <div class="form-inline">
+            <div class="row">
+                <div class="form-group col-12 col-sm-6">
+                    <BootstrapInput @bind-Value="@context.Username" maxlength="50" ShowLabel="true" DisplayText="姓名" />
+                </div>
+                <div class="form-group col-12 col-sm-6">
+                    <Select Items="@NullableBoolItems" @bind-Value="@context.Enabled" DisplayText="是否启用" ShowLabel="true">
+                    </Select>
+                </div>
+            </div>
+        </div>
+    </SearchTemplate>
+    <EditTemplate>
+        <div class="form-inline">
+            <div class="row">
+                @if (!string.IsNullOrWhiteSpace(@context.UserId))
+                {
+                    <div class="form-group col-12 col-sm-5">
+                        <BootstrapInput @bind-Value="@context.UserId" IsDisabled="true">
+                        </BootstrapInput>
+                    </div>
+                }
+                <div class="form-group col-12 col-sm-5">
+                    <BootstrapInput @bind-Value="@context.Username" placeholder="不可为空，50字以内" maxlength="50">
+                        <RequiredValidator />
+                        <StringLengthValidator Length="50" />
+                    </BootstrapInput>
+                </div>
+                @if (string.IsNullOrWhiteSpace(@context.UserId))
+                {
+                    <div class="form-group col-12 col-sm-5">
+                        <BootstrapInput TValue="string" type="password" maxlength="20" placeholder="请输入 ..." @bind-Value="@context.Password">
+                        </BootstrapInput>
+                    </div>
+                }
+                <div class="form-group col-12 col-sm-2">
+                    <Switch @bind-Value="@context.EnabledAddOrEdit" ShowInnerText="true" OnInnerText="是" OffInnerText="否" SkipValidate="true" />
+                </div>
+            </div>
+        </div>
+    </EditTemplate>
+</Table>

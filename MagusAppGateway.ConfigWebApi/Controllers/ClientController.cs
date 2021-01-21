@@ -25,7 +25,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreateClient([FromBody]ClientCreateDto dto)
+        public async Task<IActionResult> CreateClient([FromBody]ClientEditDto dto)
         {
             return Json(await _clientService.CreateClient(dto));
         }
@@ -46,8 +46,8 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> GetList([FromQuery]ClientQueryDto dto)
+        [HttpPost]
+        public async Task<IActionResult> GetPageList([FromBody]ClientQueryDto dto)
         {
             return Json(await _clientService.GetList(dto));
         }
@@ -58,7 +58,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> UpdateClient([FromBody]ClientUpdateDto dto)
+        public async Task<IActionResult> UpdateClient([FromBody]ClientEditDto dto)
         {
             return Json(await _clientService.UpdateClient(dto));
         }
@@ -71,7 +71,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfigClientCorsOrigin([FromBody]ClientCorsOriginConfigDto dto)
         {
-            return Json(await _clientService.ConfigClientCorsOrigin(dto.clientCorsOriginCreateDtos, dto.ClientId));
+            return Json(await _clientService.ConfigClientCorsOrigin(dto.clientCorsOriginEditDtos, dto.ClientId));
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfigClientGrantType([FromBody]ClientGrantTypeConfigDto dto)
         {
-            return Json(await _clientService.ConfigClientGrantType(dto.clientGrantTypeCreateDtos, dto.ClientId));
+            return Json(await _clientService.ConfigClientGrantType(dto.clientGrantTypeEditDtos, dto.ClientId));
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfigClientPostLogoutRedirectUri([FromBody]ClientPostLogoutRedirectUriConfigDto dto)
         {
-            return Json(await _clientService.ConfigClientPostLogoutRedirectUri(dto.clientPostLogoutRedirectUriCreateDtos, dto.ClientId));
+            return Json(await _clientService.ConfigClientPostLogoutRedirectUri(dto.clientPostLogoutRedirectUriEditDtos, dto.ClientId));
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfigClientRedirectUri([FromBody]ClientRedirectUriConfigDto dto)
         {
-            return Json(await _clientService.ConfigClientRedirectUri(dto.clientRedirectUriCreateDtos, dto.ClientId));
+            return Json(await _clientService.ConfigClientRedirectUri(dto.clientRedirectUriEditDtos, dto.ClientId));
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfigClientScope([FromBody]ClientScopeConfigDto dto)
         {
-            return Json(await _clientService.ConfigClientScope(dto.clientScopeCreateDtos, dto.ClientId));
+            return Json(await _clientService.ConfigClientScope(dto.clientScopeEditDtos, dto.ClientId));
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfigClientSecret([FromBody]ClientSecretConfigDto dto)
         {
-            return Json(await _clientService.ConfigClientSecret(dto.clientSecretCreateDtos, dto.ClientId));
+            return Json(await _clientService.ConfigClientSecret(dto.clientSecretEditDtos, dto.ClientId));
         }
     }
 }

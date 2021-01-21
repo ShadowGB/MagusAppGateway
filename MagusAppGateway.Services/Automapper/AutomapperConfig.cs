@@ -9,9 +9,8 @@ namespace MagusAppGateway.Services.Automapper
     {
         public AutomapperConfig()
         {
-            CreateMap<UserDto, Users>();
-            CreateMap<UserCreateDto, Users>();
-            CreateMap<UserUpdateDto, Users>();
+            //CreateMap<UserDto, Users>();
+            CreateMap<UserEditDto, Users>();
 
             CreateMap<IdentityResourceDto, IdentityResource>();
             CreateMap<IdentityResourceCreateDto, IdentityResource>();

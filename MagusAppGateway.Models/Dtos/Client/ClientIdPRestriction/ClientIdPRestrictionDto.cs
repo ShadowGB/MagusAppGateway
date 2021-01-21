@@ -2,7 +2,7 @@
 {
     public class ClientIdPRestrictionDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string Provider { get; set; }
 

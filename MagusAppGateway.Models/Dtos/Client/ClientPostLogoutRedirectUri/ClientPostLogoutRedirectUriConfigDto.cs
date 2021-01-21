@@ -6,6 +6,6 @@ namespace MagusAppGateway.Models.Dtos
     {
         public int ClientId { get; set; }
 
-        public List<ClientPostLogoutRedirectUriCreateDto> clientPostLogoutRedirectUriCreateDtos { get; set; }
+        public List<ClientPostLogoutRedirectUriEditDto> clientPostLogoutRedirectUriEditDtos { get; set; }
     }
 }

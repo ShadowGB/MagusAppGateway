@@ -1,0 +1,23 @@
+﻿<Tab IsCard="true">
+    <TabItem Text="用户基础信息">
+        <EditorForm Model="@Model" AutoGenerateAllItem="false">
+            <FieldItems>
+                <EditorItem @bind-Field="@Model.UserId" Readonly="true" />
+                <EditorItem @bind-Field="@Model.Username" Readonly="true" />
+                <EditorItem @bind-Field="@Model.Enabled" Readonly="true" />
+            </FieldItems>
+        </EditorForm>
+    </TabItem>
+    <TabItem Text="角色信息">
+        <Table TItem="UserRoleDto"
+               IsPagination="true" PageItemsSource="@PageItemsSource" OnQueryAsync="@OnQueryAsync" 
+               ShowLineNo="true" IsBordered="true" IsStriped="true">
+            <TableColumns>
+                <TableColumn @bind-Field="@context.RoleId" />
+                <TableColumn @bind-Field="@context.RoleName" />
+            </TableColumns>
+        </Table>
+    </TabItem>
+</Tab>
+
+

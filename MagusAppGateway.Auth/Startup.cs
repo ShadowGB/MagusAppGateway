@@ -33,14 +33,21 @@ namespace MagusAppGateway.Auth
             services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
             services.AddControllersWithViews();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddAutoMapper(typeof(AutomapperConfig));
+            services.AddSameSiteCookiePolicy();
             var connectionString = Configuration.GetConnectionString("DBConnection");
+
+            services.AddCors(options =>
+            options.AddPolicy("cors",
+            p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
             services.AddDbContext<UserDatabaseContext>(
                 options =>
                 {
                     //options.EnableSensitiveDataLogging(true);
                     options.UseNpgsql(connectionString);
-                },ServiceLifetime.Singleton);
+                }, ServiceLifetime.Singleton);
 
             var builder = services.AddIdentityServer(options =>
             {
@@ -85,12 +92,14 @@ namespace MagusAppGateway.Auth
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCookiePolicy();
+            app.UseCors("cors");
             app.UseStaticFiles();
 
             app.UseRouting();
             app.UseIdentityServer();
             //app.UseAuthorization();
+            app.InitData();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();

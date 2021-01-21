@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using MagusAppGateway.Services.Result;
 using System;
 using MagusAppGateway.Models.Dtos;
+using MagusAppGateway.Util.Result;
 
 namespace MagusAppGateway.Services.IServices
 {
@@ -11,9 +11,11 @@ namespace MagusAppGateway.Services.IServices
 
         Task<ResultModel> GetById(Guid id);
 
-        Task<ResultModel> UpdateUser(UserUpdateDto userUpdateDto);
+        Task<ResultModel> GetByName(string username);
 
-        Task<ResultModel> CreateUser(UserCreateDto userCreateDto);
+        Task<ResultModel> UpdateUser(UserEditDto userUpdateDto);
+
+        Task<ResultModel> CreateUser(UserEditDto userCreateDto);
 
         Task<ResultModel> DisableUser(Guid id);
 

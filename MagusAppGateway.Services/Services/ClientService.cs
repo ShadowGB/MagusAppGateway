@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MagusAppGateway.Services.IServices;
-using MagusAppGateway.Services.Result;
 using IdentityServer4.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -10,6 +9,8 @@ using IdentityServer4.Models;
 using MagusAppGateway.Contexts;
 using MagusAppGateway.Models.Dtos;
 using IdentityModel;
+using MagusAppGateway.Util.Result;
+using MagusAppGateway.Models;
 
 namespace MagusAppGateway.Services.Services
 {
@@ -22,7 +23,7 @@ namespace MagusAppGateway.Services.Services
             _userDatabaseContext = userDatabaseContext;
         }
 
-        public async Task<ResultModel> ConfigClientCorsOrigin(List<ClientCorsOriginCreateDto> clientCorsOriginCreateDtos, int clientId)
+        public async Task<ResultModel> ConfigClientCorsOrigin(List<ClientCorsOriginEditDto> clientCorsOriginCreateDtos, int clientId)
         {
             var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
                   .Include(x => x.AllowedCorsOrigins)
@@ -49,7 +50,7 @@ namespace MagusAppGateway.Services.Services
             }
         }
 
-        public async Task<ResultModel> ConfigClientGrantType(List<ClientGrantTypeCreateDto> clientGrantTypeCreateDtos, int clientId)
+        public async Task<ResultModel> ConfigClientGrantType(List<ClientGrantTypeEditDto> clientGrantTypeCreateDtos, int clientId)
         {
             var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
                      .Include(x => x.AllowedGrantTypes)
@@ -76,7 +77,7 @@ namespace MagusAppGateway.Services.Services
             }
         }
 
-        public async Task<ResultModel> ConfigClientPostLogoutRedirectUri(List<ClientPostLogoutRedirectUriCreateDto> clientPostLogoutRedirectUriCreateDtos, int clientId)
+        public async Task<ResultModel> ConfigClientPostLogoutRedirectUri(List<ClientPostLogoutRedirectUriEditDto> clientPostLogoutRedirectUriCreateDtos, int clientId)
         {
             var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
                      .Include(x => x.PostLogoutRedirectUris)
@@ -103,7 +104,7 @@ namespace MagusAppGateway.Services.Services
             }
         }
 
-        public async Task<ResultModel> ConfigClientRedirectUri(List<ClientRedirectUriCreateDto> clientRedirectUriCreateDtos, int clientId)
+        public async Task<ResultModel> ConfigClientRedirectUri(List<ClientRedirectUriEditDto> clientRedirectUriCreateDtos, int clientId)
         {
             var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
                         .Include(x => x.RedirectUris)
@@ -131,7 +132,7 @@ namespace MagusAppGateway.Services.Services
             }
         }
 
-        public async Task<ResultModel> ConfigClientScope(List<ClientScopeCreateDto> clientScopeCreateDtos, int clientId)
+        public async Task<ResultModel> ConfigClientScope(List<ClientScopeEditDto> clientScopeCreateDtos, int clientId)
         {
             var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
                         .Include(x => x.AllowedScopes)
@@ -158,7 +159,7 @@ namespace MagusAppGateway.Services.Services
             }
         }
 
-        public async Task<ResultModel> ConfigClientSecret(List<ClientSecretCreateDto> clientSecretCreateDtos, int clientId)
+        public async Task<ResultModel> ConfigClientSecret(List<ClientSecretEditDto> clientSecretCreateDtos, int clientId)
         {
             var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientId)
                         .Include(x => x.ClientSecrets)
@@ -190,7 +191,7 @@ namespace MagusAppGateway.Services.Services
             }
         }
 
-        public async Task<ResultModel> CreateClient(ClientCreateDto clientCreateDto)
+        public async Task<ResultModel> CreateClient(ClientEditDto dto)
         {
             //List<ClientIdPRestriction> clientIdPRestrictions = new List<ClientIdPRestriction>();
             //foreach (var item in clientCreateDto.IdentityProviderRestrictions)
@@ -212,7 +213,7 @@ namespace MagusAppGateway.Services.Services
             //}
 
             List<ClientCorsOrigin> clientCorsOrigins = new List<ClientCorsOrigin>();
-            foreach (var item in clientCreateDto.AllowedCorsOrigins)
+            foreach (var item in dto.AllowedCorsOrigins)
             {
                 clientCorsOrigins.Add(new ClientCorsOrigin
                 {
@@ -231,7 +232,7 @@ namespace MagusAppGateway.Services.Services
             //}
 
             List<ClientScope> clientScopes = new List<ClientScope>();
-            foreach (var item in clientCreateDto.AllowedScopes)
+            foreach (var item in dto.AllowedScopes)
             {
                 clientScopes.Add(new ClientScope
                 {
@@ -240,7 +241,7 @@ namespace MagusAppGateway.Services.Services
             }
 
             List<ClientSecret> clientSecrets = new List<ClientSecret>();
-            foreach (var item in clientCreateDto.ClientSecrets)
+            foreach (var item in dto.ClientSecrets)
             {
                 clientSecrets.Add(new ClientSecret
                 {
@@ -253,7 +254,7 @@ namespace MagusAppGateway.Services.Services
             }
 
             List<ClientGrantType> clientGrantTypes = new List<ClientGrantType>();
-            foreach (var item in clientCreateDto.AllowedGrantTypes)
+            foreach (var item in dto.AllowedGrantTypes)
             {
                 clientGrantTypes.Add(new ClientGrantType
                 {
@@ -262,7 +263,7 @@ namespace MagusAppGateway.Services.Services
             }
 
             List<ClientRedirectUri> clientRedirectUris = new List<ClientRedirectUri>();
-            foreach (var item in clientCreateDto.RedirectUris)
+            foreach (var item in dto.RedirectUris)
             {
                 clientRedirectUris.Add(new ClientRedirectUri
                 {
@@ -271,7 +272,7 @@ namespace MagusAppGateway.Services.Services
             }
 
             List<ClientPostLogoutRedirectUri> clientPostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>();
-            foreach (var item in clientCreateDto.PostLogoutRedirectUris)
+            foreach (var item in dto.PostLogoutRedirectUris)
             {
                 clientPostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri
                 {
@@ -282,16 +283,16 @@ namespace MagusAppGateway.Services.Services
             {
                 var client = new IdentityServer4.EntityFramework.Entities.Client
                 {
-                    Enabled = clientCreateDto.Enabled,
-                    ClientId = clientCreateDto.ClientId,
+                    Enabled = dto.Enabled,
+                    ClientId = dto.ClientId,
                     RequireClientSecret = true,
-                    ClientName = clientCreateDto.ClientName,
-                    Description = clientCreateDto.Description ?? "",
+                    ClientName = dto.ClientName,
+                    Description = dto.Description ?? "",
                     AlwaysIncludeUserClaimsInIdToken = true,
                     AllowAccessTokensViaBrowser=true,
                     AllowOfflineAccess=true,
                     IdentityTokenLifetime=300,
-                    AccessTokenLifetime = clientCreateDto.AccessTokenLifetime ?? 3600,
+                    AccessTokenLifetime = dto.AccessTokenLifetime ?? 3600,
                     AuthorizationCodeLifetime=300,
                     ConsentLifetime = null,
                     AbsoluteRefreshTokenLifetime= 2592000,
@@ -309,7 +310,7 @@ namespace MagusAppGateway.Services.Services
                     UserSsoLifetime = null,
                     UserCodeType = null,
                     DeviceCodeLifetime = 300,
-                    NonEditable = clientCreateDto.NonEditable,
+                    NonEditable = dto.NonEditable,
                     ClientSecrets = clientSecrets,
                     AllowedGrantTypes = clientGrantTypes,
                     RedirectUris = clientRedirectUris,
@@ -518,23 +519,37 @@ namespace MagusAppGateway.Services.Services
 
         public async Task<ResultModel> GetList(ClientQueryDto clientQueryDto)
         {
-            try
+            return await Task.Run(() =>
             {
-                var query = _userDatabaseContext.Clients.Where(x => 1 == 1);
-                if (!string.IsNullOrWhiteSpace(clientQueryDto.ClientName))
+                try
                 {
-                    query = query.Where(x => x.ClientName.Contains(clientQueryDto.ClientName));
+                    var query = _userDatabaseContext.Clients.Where(x => 1 == 1);
+                    if (!string.IsNullOrWhiteSpace(clientQueryDto.ClientName))
+                    {
+                        query = query.Where(x => x.ClientName.Contains(clientQueryDto.ClientName));
+                    }
+                    var list = query.OrderBy(x => x.Id).Select(x => new ClientDto
+                    {
+                        Id = x.Id,
+                        Enabled = x.Enabled,
+                        ClientId = x.ClientId,
+                        RequireClientSecret = x.RequireClientSecret,
+                        ClientName = x.ClientName,
+                        AccessTokenLifetime = x.AccessTokenLifetime,
+                        Created = x.Created,
+                        Updated = x.Updated
+                    });
+                    var page = PagedList<ClientDto>.ToPagedList(list, clientQueryDto.CurrentPage, clientQueryDto.PageSize);
+                    return new ResultModel(ResultCode.Success, page);
                 }
-                var list = await query.ToListAsync();
-                return new ResultModel(ResultCode.Success, list);
-            }
-            catch (Exception ex)
-            {
-                return new ResultModel(ResultCode.Fail, ex.Message);
-            }
+                catch (Exception ex)
+                {
+                    return new ResultModel(ResultCode.Fail, ex.Message);
+                }
+            });
         }
 
-        public async Task<ResultModel> UpdateClient(ClientUpdateDto clientUpdateDto)
+        public async Task<ResultModel> UpdateClient(ClientEditDto clientUpdateDto)
         {
             var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientUpdateDto.Id)
                 //.Include(x => x.ClientSecrets)
@@ -552,7 +567,7 @@ namespace MagusAppGateway.Services.Services
             client.ClientId = clientUpdateDto.ClientId;
             client.ClientName = clientUpdateDto.ClientName;
             client.Description = clientUpdateDto.Description;
-            client.AccessTokenLifetime = clientUpdateDto.AccessTokenLifetime;
+            client.AccessTokenLifetime = clientUpdateDto.AccessTokenLifetime.Value;
             client.Updated = DateTime.Now;
             client.NonEditable = clientUpdateDto.NonEditable;
 

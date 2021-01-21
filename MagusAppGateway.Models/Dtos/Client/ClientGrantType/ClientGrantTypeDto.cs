@@ -2,7 +2,7 @@
 {
     public class ClientGrantTypeDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string GrantType { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using MagusAppGateway.Services.Result;
 using MagusAppGateway.Models.Dtos;
+using MagusAppGateway.Util.Result;
 
 namespace MagusAppGateway.Services.IServices
 {
@@ -8,10 +8,10 @@ namespace MagusAppGateway.Services.IServices
     {
         Task<ResultModel> GetList(ApiScopeQueryDto apiScopeDto);
 
-       Task<ResultModel> GetById(int id);
+        Task<ResultModel> GetById(int id);
 
-        Task<ResultModel> UpdateApiScope(ApiScopeUpdateDto apiScopeUpdateDto);
+        Task<ResultModel> UpdateApiScope(ApiScopeEditDto dto);
 
-        Task<ResultModel> CreateApiScope(ApiScopeCreateDto apiScopeCreateDto);
+        Task<ResultModel> CreateApiScope(ApiScopeEditDto dto);
     }
 }
