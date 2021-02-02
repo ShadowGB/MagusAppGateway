@@ -30,7 +30,14 @@ namespace MagusAppGateway.Gateway
                 options.UseNpgsql(connectionString,
                     sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
             }, ServiceLifetime.Singleton);
-            services.AddOcelot().AddOcelotDbConfig(x => x.DbConnectionStrings = connectionString);
+            services.AddOcelot().AddOcelotDbConfig(
+                x => { 
+                    x.DbConnectionStrings = connectionString;
+                    x.EnableTimer = true; 
+                    x.TimerDelay = 10 * 100; }
+                );
+            //ÈÈ¸üÐÂ
+            services.AddHostedService<DbConfigurationPoller>();
             services.AddAuth(Configuration);
         }
 
