@@ -25,6 +25,8 @@ namespace MagusAppGateway.Auth
             {
                 var dbcontext = scope.ServiceProvider.GetService<UserDatabaseContext>();
                 System.Console.WriteLine("开始执行数据迁移");
+                //dbcontext.Database.EnsureDeleted();
+                //dbcontext.Database.EnsureCreated();
                 dbcontext.Database.Migrate();
 
                 System.Console.WriteLine("开始创建种子数据");
@@ -336,7 +338,8 @@ namespace MagusAppGateway.Auth
                         new OcelotConfig
                         {
                             Id = ocelotGuid,
-                            IsEnable = true
+                            IsEnable = true,
+                            ConfigName = "测试用配置"
                         });
                 }
 

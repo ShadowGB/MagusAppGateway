@@ -11,7 +11,7 @@ namespace MagusAppGateway.Models.Dtos
         public string ClientId { get; set; }
         public string ProtocolType { get; set; } = "oidc";
         public List<ClientSecretDto> ClientSecrets { get; set; }
-        public bool RequireClientSecret { get; set; } = true;
+        public bool RequireClientSecret { get; set; }
         public string ClientName { get; set; }
         public string Description { get; set; }
         public string ClientUri { get; set; }

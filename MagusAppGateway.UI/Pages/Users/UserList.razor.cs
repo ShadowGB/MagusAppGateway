@@ -7,6 +7,7 @@ using MagusAppGateway.UI.IServices;
 using Microsoft.AspNetCore.Components;
 using MagusAppGateway.UI.Result;
 using MagusAppGateway.UI.ViewModel;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace MagusAppGateway.UI.Pages.Users
 {
@@ -163,8 +164,13 @@ namespace MagusAppGateway.UI.Pages.Users
             };
             option.BodyTemplate = DynamicComponent.CreateComponent<UserRole>(new KeyValuePair<string, object>[]
             {
-                new KeyValuePair<string, object>(nameof(UserRole.OnClose),new Action(()=>{ option.Dialog?.Toggle(); }))
+                new KeyValuePair<string, object>(nameof(UserRole.OnClose),new Action(()=>{ option.Dialog?.Toggle(); })),
             }).Render();
+            //option.FooterTemplate=DynamicComponent.CreateComponent<Button>(new KeyValuePair<string, object>[]
+            //{
+            //    new KeyValuePair<string, object>(nameof(Button.Text),"保存")
+            //    //new KeyValuePair<string, object>(nameof(Button.OnClick),EventCallback.Factory.Create<MouseEventArgs>(option.Dialog,()=>{ option.Dialog. }))
+            //}).Render();
             DialogService.Show(option);
 
             return Task.CompletedTask;

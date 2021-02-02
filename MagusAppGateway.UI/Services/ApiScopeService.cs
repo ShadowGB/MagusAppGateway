@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MagusAppGateway.UI.Result;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MagusAppGateway.UI.Services
 {
@@ -37,6 +38,12 @@ namespace MagusAppGateway.UI.Services
                 return JsonConvert.DeserializeObject<ResultModel<string>>(await response.Content.ReadAsStringAsync());
             }
             return null;
+        }
+
+        public async Task<ResultModel<List<ApiScopeDto>>> GetAllApiScope()
+        {
+            return JsonConvert.DeserializeObject<ResultModel<List<ApiScopeDto>>>(
+                await _httpClient.GetStringAsync($"/api/ApiScope/GetAll"));
         }
 
         public Task<ResultModel<ApiScopeDto>> GetApiScopeById(int id)

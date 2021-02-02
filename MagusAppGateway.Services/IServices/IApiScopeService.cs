@@ -8,6 +8,8 @@ namespace MagusAppGateway.Services.IServices
     {
         Task<ResultModel> GetList(ApiScopeQueryDto apiScopeDto);
 
+        Task<ResultModel> GetAll();
+
         Task<ResultModel> GetById(int id);
 
         Task<ResultModel> UpdateApiScope(ApiScopeEditDto dto);

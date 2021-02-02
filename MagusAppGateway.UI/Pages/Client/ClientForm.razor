@@ -1,0 +1,169 @@
+﻿<Tab IsBorderCard="true">
+    <TabItem Text="基础数据">
+        <EditorForm Model="@ClientEditDto" AutoGenerateAllItem="false">
+            <FieldItems>
+                @if (ClientEditDto.Id != null)
+                {
+                    <EditorItem @bind-Field="@ClientEditDto.Id" Readonly="true" />
+                }
+                <EditorItem @bind-Field="@ClientEditDto.Enabled" />
+                <EditorItem @bind-Field="@ClientEditDto.ClientId" />
+                <EditorItem @bind-Field="@ClientEditDto.ClientName" />
+                <EditorItem @bind-Field="@ClientEditDto.Description" />
+                <EditorItem @bind-Field="@ClientEditDto.AccessTokenLifetime" />
+                <EditorItem @bind-Field="@ClientEditDto.RequireClientSecret" />
+            </FieldItems>
+        </EditorForm>
+    </TabItem>
+    <TabItem Text="跨域配置">
+        <GroupBox Title="新增配置" style="margin-top: 1.5rem;">
+            <div class="form-inline">
+                <div class="row">
+                    <div class="form-group col-12 col-sm-10">
+                        <BootstrapInput @bind-Value="@ClientCorsOriginEditDto.Origin" ShowLabel="true" DisplayText="跨域源" />
+                    </div>
+                    <div class="form-group col-12 col-sm-2 align-items-end">
+                        <Button Icon="fa fa-save" OnClick="@OnCorsAdd">新增</Button>
+                    </div>
+                </div>
+            </div>
+        </GroupBox>
+        <GroupBox Title="配置列表" style="margin-top: 1.5rem;">
+            <Table TItem="ClientCorsOriginEditDto" Items="ClientEditDto.AllowedCorsOrigins" IsBordered="true" IsStriped="true" TableSize="TableSize.Compact" ShowAddButton="false"
+                   ShowLineNo="true" ShowToolbar="true" ShowEditButton="false" ShowDeleteButton="true" ShowExtendButtons="true" OnQueryAsync="OnCorsQuery"
+                   OnDeleteAsync="OnCorsDelete">
+                <TableColumns>
+                    <TableColumn @bind-Field="@context.Origin" />
+                </TableColumns>
+            </Table>
+        </GroupBox>
+    </TabItem>
+    <TabItem Text="授权方式">
+        <GroupBox Title="新增配置" style="margin-top: 1.5rem;">
+            <div class="form-inline">
+                <div class="row">
+                    <div class="form-group col-12 col-sm-10">
+                        <Select @bind-Value="@ClientGrantTypeEditDto.GrantType" TValue="string" Items="GrantTypes" ShowLabel="true" DisplayText="授权流程" class="col-sm-10" />
+                    </div>
+                    <div class="form-group col-12 col-sm-2 align-items-end">
+                        <Button Icon="fa fa-save" OnClick="OnGrantAdd">新增</Button>
+                    </div>
+                </div>
+            </div>
+        </GroupBox>
+        <GroupBox Title="配置列表" style="margin-top: 1.5rem;">
+            <Table TItem="ClientGrantTypeEditDto" Items="ClientEditDto.AllowedGrantTypes" IsBordered="true" IsStriped="true" TableSize="TableSize.Compact" ShowAddButton="false"
+                   ShowLineNo="true" ShowToolbar="true" ShowEditButton="false" ShowDeleteButton="true" ShowExtendButtons="true" OnQueryAsync="OnGrantQuery"
+                   OnDeleteAsync="OnGrantDelete">
+                <TableColumns>
+                    <TableColumn @bind-Field="@context.GrantType" />
+                </TableColumns>
+            </Table>
+        </GroupBox>
+    </TabItem>
+    <TabItem Text="登出回调地址">
+        <GroupBox Title="新增配置" style="margin-top: 1.5rem;">
+            <div class="form-inline">
+                <div class="row">
+                    <div class="form-group col-12 col-sm-10">
+                        <BootstrapInput @bind-Value="@ClientPostLogoutRedirectUriEditDto.PostLogoutRedirectUri" ShowLabel="true" DisplayText="登出回调地址" />
+                    </div>
+                    <div class="form-group col-12 col-sm-2 align-items-end">
+                        <Button Icon="fa fa-save" OnClick="@OnLoginOutAdd">新增</Button>
+                    </div>
+                </div>
+            </div>
+        </GroupBox>
+        <GroupBox Title="配置列表" style="margin-top: 1.5rem;">
+            <Table TItem="ClientPostLogoutRedirectUriEditDto" Items="ClientEditDto.PostLogoutRedirectUris" IsBordered="true" IsStriped="true" TableSize="TableSize.Compact" ShowAddButton="false"
+                   ShowLineNo="true" ShowToolbar="true" ShowEditButton="false" ShowDeleteButton="true" ShowExtendButtons="true" OnQueryAsync="OnLoginOutQuery"
+                   OnDeleteAsync="OnLoginOutDelete">
+                <TableColumns>
+                    <TableColumn @bind-Field="@context.PostLogoutRedirectUri" />
+                </TableColumns>
+            </Table>
+        </GroupBox>
+    </TabItem>
+    <TabItem Text="登录回调地址">
+        <GroupBox Title="新增配置" style="margin-top: 1.5rem;">
+            <div class="form-inline">
+                <div class="row">
+                    <div class="form-group col-12 col-sm-10">
+                        <BootstrapInput @bind-Value="@ClientRedirectUriEditDto.RedirectUri" ShowLabel="true" DisplayText="登录回调地址" />
+                    </div>
+                    <div class="form-group col-12 col-sm-2 align-items-end">
+                        <Button Icon="fa fa-save" OnClick="@OnRedirectAdd">新增</Button>
+                    </div>
+                </div>
+            </div>
+        </GroupBox>
+        <GroupBox Title="配置列表" style="margin-top: 1.5rem;">
+            <Table TItem="ClientRedirectUriEditDto" Items="ClientEditDto.RedirectUris" IsBordered="true" IsStriped="true" TableSize="TableSize.Compact" ShowAddButton="false"
+                   ShowLineNo="true" ShowToolbar="true" ShowEditButton="false" ShowDeleteButton="true" ShowExtendButtons="true" OnQueryAsync="OnRedirectQuery"
+                   OnDeleteAsync="OnRedirectDelete">
+                <TableColumns>
+                    <TableColumn @bind-Field="@context.RedirectUri" />
+                </TableColumns>
+            </Table>
+        </GroupBox>
+    </TabItem>
+    <TabItem Text="API域配置">
+        <GroupBox Title="新增配置" style="margin-top: 1.5rem;">
+            <div class="form-inline">
+                <div class="row">
+                    <div class="form-group col-12 col-sm-10">
+                        <AutoComplete @bind-Value="@ClientScopeEditDto.Scope" IsLikeMatch="true" IgnoreCase="true" ShowLabel="true" DisplayText="API域" Items="ApiScopes" />
+                    </div>
+                    <div class="form-group col-12 col-sm-2 align-items-end">
+                        <Button Icon="fa fa-save" OnClick="@OnApiAdd">新增</Button>
+                    </div>
+                </div>
+            </div>
+        </GroupBox>
+        <GroupBox Title="配置列表" style="margin-top: 1.5rem;">
+            <Table TItem="ClientScopeEditDto" Items="ClientEditDto.AllowedScopes" IsBordered="true" IsStriped="true" TableSize="TableSize.Compact" ShowAddButton="false"
+                   ShowLineNo="true" ShowToolbar="true" ShowEditButton="false" ShowDeleteButton="true" ShowExtendButtons="true" OnQueryAsync="OnApiQuery"
+                   OnDeleteAsync="OnApiDelete">
+                <TableColumns>
+                    <TableColumn @bind-Field="@context.Scope" />
+                </TableColumns>
+            </Table>
+        </GroupBox>
+    </TabItem>
+    <TabItem Text="秘钥配置">
+        <GroupBox Title="新增配置" style="margin-top: 1.5rem;">
+            <div class="form-inline">
+                <div class="row">
+                    <div class="form-group col-6">
+                        <BootstrapInput @bind-Value="@ClientSecretEditDto.Value" ShowLabel="true" DisplayText="秘钥" />
+                    </div>
+                    <div class="form-group col-6">
+                        <BootstrapInput @bind-Value="@ClientSecretEditDto.Description" ShowLabel="true" DisplayText="描述" />
+                    </div>
+                    <div class="form-group col-6">
+                        <DateTimePicker TValue="DateTime" ViewModel="DatePickerViewModel.DateTime" ShowLabel="true" DisplayText="过期时间"
+                                        @bind-Value="@ClientSecretEditDto.Expiration" />
+                    </div>
+                    <div class="form-group col-6 align-items-end">
+                        <Button Icon="fa fa-save" OnClick="@OnSecretAdd">新增</Button>
+                    </div>
+                </div>
+            </div>
+        </GroupBox>
+        <GroupBox Title="配置列表" style="margin-top: 1.5rem;">
+            <Table TItem="ClientSecretEditDto" Items="ClientEditDto.ClientSecrets" IsBordered="true" IsStriped="true" TableSize="TableSize.Compact" ShowAddButton="false"
+                   ShowLineNo="true" ShowToolbar="true" ShowEditButton="false" ShowDeleteButton="true" ShowExtendButtons="true" OnQueryAsync="OnSecretQuery"
+                   OnDeleteAsync="OnSecretDelete">
+                <TableColumns>
+                    <TableColumn @bind-Field="@context.Value" />
+                    <TableColumn @bind-Field="@context.Expiration" />
+                    <TableColumn @bind-Field="@context.Description" />
+                </TableColumns>
+            </Table>
+        </GroupBox>
+    </TabItem>
+</Tab>
+
+<GroupBox Title="保存" style="margin-top: 1.5rem;">
+    <Button Icon="fa fa-save" Text="提交" OnClick="OnSave"/>
+</GroupBox>

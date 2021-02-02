@@ -26,11 +26,11 @@ namespace MagusAppGateway.Models.Dtos
 
         public List<ClientSecretEditDto> ClientSecrets { get; set; }
 
+        public bool RequireClientSecret { get; set; }
+
         public string ClientName { get; set; }
 
         public string Description { get; set; }
-
-        public bool AlwaysIncludeUserClaimsInIdToken { get; set; }
 
         public List<ClientGrantTypeEditDto> AllowedGrantTypes { get; set; }
 

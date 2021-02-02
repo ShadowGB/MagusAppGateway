@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MagusAppGateway.UI.ViewModel;
 using MagusAppGateway.UI.Result;
+using System.Collections.Generic;
 
 namespace MagusAppGateway.UI.IServices
 {
@@ -13,5 +14,7 @@ namespace MagusAppGateway.UI.IServices
         Task<ResultModel<string>> EditApiScope(ApiScopeEditDto dto);
 
         Task<ResultModel<ApiScopeDto>> GetApiScopeById(int id);
+
+        Task<ResultModel<List<ApiScopeDto>>> GetAllApiScope();
     }
 }

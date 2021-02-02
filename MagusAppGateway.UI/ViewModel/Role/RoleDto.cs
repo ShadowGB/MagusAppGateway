@@ -7,6 +7,8 @@ namespace MagusAppGateway.UI.ViewModel
 {
     public class RoleDto : QueryModelBase
     {
+        public string Id { get; set; }
 
+        public string RoleName { get; set; }
     }
 }

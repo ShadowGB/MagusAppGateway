@@ -1,3 +1,46 @@
 ﻿@page "/rolelist"
+@attribute [Authorize]
 
-<h3>RoleList</h3>
+<Table TItem="RoleDto"
+       IsPagination="true" PageItemsSource="@PageItemsSource"
+       SearchModel="@SearchModel" ShowDefaultButtons="true" ShowEditButton="true" ShowDeleteButton="false"
+       ShowLineNo="true" IsBordered="true" ShowExtendButtons="true"
+       ShowToolbar="true" ShowSearch="true" ShowAddButton="true"
+       AddModalTitle="新增API" EditModalTitle="编辑API"
+       TableSize="TableSize.Compact" IsStriped="true" OnQueryAsync="@OnQueryAsync" OnAddAsync="@OnAddAsync" OnSaveAsync="@OnSaveAsync"
+       OnResetSearchAsync="@OnResetSearchAsync"
+       ClickToSelect="true">
+    <TableColumns>
+        <TableColumn @bind-Field="@context.Id" />
+        <TableColumn @bind-Field="@context.RoleName" Searchable="true"/>
+    </TableColumns>
+    <SearchTemplate>
+        <div class="form-inline">
+            <div class="row">
+                <div class="form-group col-12 col-sm-6">
+                    <BootstrapInput @bind-Value="@context.RoleName" maxlength="50" ShowLabel="true" DisplayText="角色名称" />
+                </div>
+            </div>
+        </div>
+    </SearchTemplate>
+    <EditTemplate>
+        <div class="form-inline">
+            <div class="row">
+                @if (@context.Id != null)
+                {
+                    <div class="form-group col-12 col-sm-12">
+                        <BootstrapInput @bind-Value="@context.Id" IsDisabled="true">
+                        </BootstrapInput>
+                    </div>
+                }
+                <div class="form-group col-12 col-sm-6">
+                    <BootstrapInput @bind-Value="@context.RoleName" placeholder="不可为空，50字以内" maxlength="50">
+                        <RequiredValidator />
+                        <StringLengthValidator Length="50" />
+                    </BootstrapInput>
+                </div>
+            </div>
+        </div>
+    </EditTemplate>
+</Table>
+

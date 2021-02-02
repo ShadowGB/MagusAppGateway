@@ -8,7 +8,7 @@ namespace MagusAppGateway.Models.Dtos
     public class RolesEditDto
     {
         [Display(Name = "编号")]
-        public Guid? RoleId { get; set; }
+        public Guid? Id { get; set; }
 
         [Display(Name = "角色名称")]
         public string RoleName { get; set; }

@@ -38,6 +38,7 @@ namespace MagusAppGateway.ConfigWebApi
             services.AddScoped<IApiScopeService, ApiScopeService>();
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IOcelotConfigService, OcelotConfigService>();
 
             services.AddAutoMapper(typeof(AutomapperConfig));
             services.AddSwaggerGen(c =>

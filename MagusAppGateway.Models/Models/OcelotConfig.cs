@@ -22,6 +22,11 @@ namespace MagusAppGateway.Models
         public bool IsEnable { get; set; }
 
         /// <summary>
+        /// 配置名称
+        /// </summary>
+        [Required]
+        public string ConfigName { get; set; }
+        /// <summary>
         /// 路由配置
         /// </summary>
         public List<Routes> Routes { get; set; }
@@ -129,11 +134,6 @@ namespace MagusAppGateway.Models
     /// </summary>
     public class AuthenticationOptions : BaseModel
     {
-        //public AuthenticationOptions()
-        //{
-        //    AllowedScopes = new List<string>();
-        //}
-
         /// <summary>
         /// APIScope名称
         /// </summary>
@@ -154,7 +154,10 @@ namespace MagusAppGateway.Models
     /// </summary>
     public class DownstreamHostAndPorts : BaseModel
     {
-
+        public DownstreamHostAndPorts()
+        {
+            Id = new Guid();
+        }
         /// <summary>
         /// 地址
         /// </summary>
@@ -172,7 +175,10 @@ namespace MagusAppGateway.Models
 
     public class UpstreamHttpMethods : BaseModel
     {
-
+        public UpstreamHttpMethods()
+        {
+            Id = new Guid();
+        }
         public string Method { get; set; }
 
         public Guid RoutesGuid { get; set; }

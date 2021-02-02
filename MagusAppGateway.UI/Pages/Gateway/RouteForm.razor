@@ -1,0 +1,92 @@
+﻿<Tab IsCard="true">
+    <TabItem Text="基础数据">
+        <EditorForm Model="@RoutesEditDto" AutoGenerateAllItem="false">
+            <FieldItems>
+                @if (RoutesEditDto.Id != null)
+                {
+                    <EditorItem @bind-Field="@RoutesEditDto.Id" Readonly="true" />
+                }
+                <EditorItem @bind-Field="@RoutesEditDto.DownstreamPathTemplate" />
+                <EditorItem @bind-Field="@RoutesEditDto.DownstreamScheme" />
+                <EditorItem @bind-Field="@RoutesEditDto.UpstreamPathTemplate" />
+                <EditorItem @bind-Field="@RoutesEditDto.RouteIsCaseSensitive" />
+            </FieldItems>
+        </EditorForm>
+    </TabItem>
+    <TabItem Text="负载均衡">
+        <GroupBox Title="新增配置" style="margin-top: 1.5rem;">
+            <div class="form-inline">
+                <div class="row">
+                    <div class="form-group col-12 col-sm-10">
+                        <Select @bind-Value="@LoadBalancerOptionEditDto.Type" TValue="string" Items="LoadBalanceTypes" ShowLabel="true" DisplayText="负载类型" />
+                    </div>
+                </div>
+            </div>
+        </GroupBox>
+    </TabItem>
+    <TabItem Text="授权配置">
+        <GroupBox Title="新增配置" style="margin-top: 1.5rem;">
+            <div class="form-inline">
+                <div class="row">
+                    <div class="form-group col-12 col-sm-10">
+                        <BootstrapInput @bind-Value="@AuthenticationOptionsEditDto.AuthenticationProviderKey" ShowLabel="true" DisplayText="API名称" />
+                    </div>
+                </div>
+            </div>
+        </GroupBox>
+    </TabItem>
+    <TabItem Text="上游HTTP方法">
+        <GroupBox Title="新增配置" style="margin-top: 1.5rem;">
+            <div class="form-inline">
+                <div class="row">
+                    <div class="form-group col-12 col-sm-10">
+                        <BootstrapInput @bind-Value="@UpstreamHttpMethodsEditDto.Method" ShowLabel="true" DisplayText="上游请求方法" />
+                    </div>
+                    <div class="form-group col-12 col-sm-2 align-items-end">
+                        <Button Icon="fa fa-save" OnClick="OnUpstreamHttpMethodsAdd">新增</Button>
+                    </div>
+                </div>
+            </div>
+        </GroupBox>
+        <GroupBox Title="配置列表" style="margin-top: 1.5rem;">
+            <Table TItem="UpstreamHttpMethodsEditDto" Items="RoutesEditDto.UpstreamHttpMethods" IsBordered="true" IsStriped="true" TableSize="TableSize.Compact"
+                   ShowAddButton="false" ShowLineNo="true" ShowToolbar="true" ShowEditButton="false" OnQueryAsync="OnUpstreamHttpMethodsQuery"
+                   ShowDeleteButton="true" ShowExtendButtons="true" OnDeleteAsync="OnUpstreamHttpMethodsDelete">
+                <TableColumns>
+                    <TableColumn @bind-Field="@context.Method" />
+                </TableColumns>
+            </Table>
+        </GroupBox>
+    </TabItem>
+    <TabItem Text="下游地址">
+        <GroupBox Title="新增配置" style="margin-top: 1.5rem;">
+            <div class="form-inline">
+                <div class="row">
+                    <div class="form-group col-6">
+                        <BootstrapInput @bind-Value="@DownstreamHostAndPortsEditDto.Host" ShowLabel="true" DisplayText="地址" />
+                    </div>
+                    <div class="form-group col-6">
+                        <BootstrapInput @bind-Value="@DownstreamHostAndPortsEditDto.Port" type="number" ShowLabel="true" DisplayText="端口" />
+                    </div>
+                    <div class="form-group col-6 align-items-end">
+                        <Button Icon="fa fa-save" OnClick="OnDownstreamHostAndPortsAdd">新增</Button>
+                    </div>
+                </div>
+            </div>
+        </GroupBox>
+        <GroupBox Title="配置列表" style="margin-top: 1.5rem;">
+            <Table TItem="DownstreamHostAndPortsEditDto" Items="RoutesEditDto.DownstreamHostAndPorts" IsBordered="true" IsStriped="true"
+                   TableSize="TableSize.Compact" ShowAddButton="false" ShowLineNo="true" ShowToolbar="true" OnQueryAsync="OnDownstreamHostAndPortsQuery"
+                   ShowEditButton="false" ShowDeleteButton="true" ShowExtendButtons="true" OnDeleteAsync="OnDownstreamHostAndPortsDelete">
+                <TableColumns>
+                    <TableColumn @bind-Field="@context.Host" />
+                    <TableColumn @bind-Field="@context.Port" />
+                </TableColumns>
+            </Table>
+        </GroupBox>
+    </TabItem>
+</Tab>
+
+<GroupBox Title="保存" style="margin-top: 1.5rem;">
+    <Button Icon="fa fa-save" Text="提交" OnClick="@OnSave" />
+</GroupBox>

@@ -67,6 +67,26 @@ namespace MagusAppGateway.Services.Services
             }
         }
 
+        public async Task<ResultModel> GetAll()
+        {
+            return await Task.Run(() => {
+                try
+                {
+                    var query = _userDatabaseContext.ApiScopes.Where(x => x.Enabled != false);
+                    query = query.OrderBy(x => x.Id);
+                    var list = query.Select(x => new ApiScopeDto
+                    {
+                        Name = x.Name,
+                    });
+                    return new ResultModel(ResultCode.Success, list);
+                }
+                catch (Exception ex)
+                {
+                    return new ResultModel(ResultCode.Fail, ex.Message);
+                }
+            });
+        }
+
         public async Task<ResultModel> GetById(int id)
         {
             var apiScope = await _userDatabaseContext.ApiScopes.Where(x => x.Id == id)

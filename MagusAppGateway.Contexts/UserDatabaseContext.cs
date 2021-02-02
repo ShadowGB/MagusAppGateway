@@ -45,10 +45,11 @@ namespace MagusAppGateway.Contexts
             modelBuilder.Entity<ApiResourceSecret>().HasOne(x => x.ApiResource).WithMany(x => x.Secrets).HasForeignKey(x => x.ApiResourceId);
             //Ocelot
             modelBuilder.Entity<DownstreamHostAndPorts>().HasOne(x => x.Routes).WithMany(x => x.DownstreamHostAndPorts).HasForeignKey(x => x.RoutesGuid);
+            modelBuilder.Entity<UpstreamHttpMethods>().HasOne(x => x.Routes).WithMany(x => x.UpstreamHttpMethods).HasForeignKey(x => x.RoutesGuid);
             modelBuilder.Entity<Routes>().HasOne(x => x.OcelotConfig).WithMany(x => x.Routes).HasForeignKey(x => x.OcelotConfigGuid);
-            modelBuilder.Entity<AuthenticationOptions>().HasOne(x => x.Routes).WithOne(x => x.AuthenticationOptions).HasForeignKey<Routes>(x => x.Id).HasPrincipalKey<AuthenticationOptions>(x => x.RoutesGuid);
-            modelBuilder.Entity<LoadBalancerOption>().HasOne(x => x.Routes).WithOne(x => x.LoadBalancerOption).HasForeignKey<Routes>(x => x.Id).HasPrincipalKey<LoadBalancerOption>(x => x.RoutesGuid);
-            modelBuilder.Entity<GlobalConfiguration>().HasOne(x => x.OcelotConfig).WithOne(x => x.GlobalConfiguration).HasForeignKey<GlobalConfiguration>(x => x.OcelotConfigGuid).HasPrincipalKey<OcelotConfig>(x => x.Id);
+            modelBuilder.Entity<Routes>().HasOne(x => x.AuthenticationOptions).WithOne(x => x.Routes).HasForeignKey<AuthenticationOptions>(x => x.RoutesGuid).HasPrincipalKey<Routes>(x => x.Id);
+            modelBuilder.Entity<Routes>().HasOne(x => x.LoadBalancerOption).WithOne(x => x.Routes).HasForeignKey<LoadBalancerOption>(x => x.RoutesGuid).HasPrincipalKey<Routes>(x => x.Id);
+            modelBuilder.Entity<OcelotConfig>().HasOne(x => x.GlobalConfiguration).WithOne(x => x.OcelotConfig).HasForeignKey<GlobalConfiguration>(x => x.OcelotConfigGuid).HasPrincipalKey<OcelotConfig>(x => x.Id);
 
             modelBuilder.Entity<OcelotConfig>().HasKey(x => x.Id);
             modelBuilder.Entity<Routes>().HasKey(x => x.Id);

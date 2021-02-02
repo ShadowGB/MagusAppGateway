@@ -193,6 +193,11 @@ namespace MagusAppGateway.Services.Services
 
         public async Task<ResultModel> CreateClient(ClientEditDto dto)
         {
+            if (_userDatabaseContext.Clients.Any(x => x.ClientId == dto.ClientId))
+            {
+                return new ResultModel(ResultCode.Fail, "此客户端ID已经存在，请重新输入");
+            }
+
             //List<ClientIdPRestriction> clientIdPRestrictions = new List<ClientIdPRestriction>();
             //foreach (var item in clientCreateDto.IdentityProviderRestrictions)
             //{
@@ -239,6 +244,14 @@ namespace MagusAppGateway.Services.Services
                     Scope = item.Scope
                 });
             }
+            clientScopes.Add(new ClientScope
+            {
+                Scope = "openid"
+            });
+            clientScopes.Add(new ClientScope
+            {
+                Scope = "profile"
+            });
 
             List<ClientSecret> clientSecrets = new List<ClientSecret>();
             foreach (var item in dto.ClientSecrets)
@@ -285,18 +298,18 @@ namespace MagusAppGateway.Services.Services
                 {
                     Enabled = dto.Enabled,
                     ClientId = dto.ClientId,
-                    RequireClientSecret = true,
+                    RequireClientSecret = dto.RequireClientSecret,
                     ClientName = dto.ClientName,
                     Description = dto.Description ?? "",
                     AlwaysIncludeUserClaimsInIdToken = true,
-                    AllowAccessTokensViaBrowser=true,
-                    AllowOfflineAccess=true,
-                    IdentityTokenLifetime=300,
+                    AllowAccessTokensViaBrowser = true,
+                    AllowOfflineAccess = true,
+                    IdentityTokenLifetime = 300,
                     AccessTokenLifetime = dto.AccessTokenLifetime ?? 3600,
-                    AuthorizationCodeLifetime=300,
+                    AuthorizationCodeLifetime = 300,
                     ConsentLifetime = null,
-                    AbsoluteRefreshTokenLifetime= 2592000,
-                    SlidingRefreshTokenLifetime= 1296000,
+                    AbsoluteRefreshTokenLifetime = 2592000,
+                    SlidingRefreshTokenLifetime = 1296000,
                     RefreshTokenUsage = (int)TokenUsage.OneTimeOnly,
                     UpdateAccessTokenClaimsOnRefresh = true,
                     RefreshTokenExpiration = (int)TokenExpiration.Absolute,
@@ -304,7 +317,7 @@ namespace MagusAppGateway.Services.Services
                     EnableLocalLogin = true,
                     IncludeJwtId = true,
                     AlwaysSendClientClaims = false,
-                    ClientClaimsPrefix =  "client_",
+                    ClientClaimsPrefix = "client_",
                     PairWiseSubjectSalt = null,
                     Created = DateTime.Now,
                     UserSsoLifetime = null,
@@ -321,6 +334,7 @@ namespace MagusAppGateway.Services.Services
                     //Properties = clientProperties,
                     //Claims = clientClaims,
                     //RequirePkce = clientCreateDto.RequirePkce ?? true,
+                    RequireRequestObject = false,
                 };
 
 
@@ -551,16 +565,18 @@ namespace MagusAppGateway.Services.Services
 
         public async Task<ResultModel> UpdateClient(ClientEditDto clientUpdateDto)
         {
+            if (_userDatabaseContext.Clients.Any(x => x.ClientId == clientUpdateDto.ClientId && x.Id != clientUpdateDto.Id.Value))
+            {
+                return new ResultModel(ResultCode.Fail, "此客户端ID已存在");
+            }
+
             var client = await _userDatabaseContext.Clients.Where(x => x.Id == clientUpdateDto.Id)
-                //.Include(x => x.ClientSecrets)
-                //.Include(x => x.AllowedGrantTypes)
-                //.Include(x => x.RedirectUris)
-                //.Include(x => x.PostLogoutRedirectUris)
-                //.Include(x => x.AllowedScopes)
-                //.Include(x => x.IdentityProviderRestrictions)
-                //.Include(x => x.Claims)
-                //.Include(x => x.AllowedCorsOrigins)
-                //.Include(x => x.Properties)
+                .Include(x => x.ClientSecrets)
+                .Include(x => x.AllowedGrantTypes)
+                .Include(x => x.RedirectUris)
+                .Include(x => x.PostLogoutRedirectUris)
+                .Include(x => x.AllowedScopes)
+                .Include(x => x.AllowedCorsOrigins)
                 .FirstOrDefaultAsync();
 
             client.Enabled = clientUpdateDto.Enabled;
@@ -570,6 +586,13 @@ namespace MagusAppGateway.Services.Services
             client.AccessTokenLifetime = clientUpdateDto.AccessTokenLifetime.Value;
             client.Updated = DateTime.Now;
             client.NonEditable = clientUpdateDto.NonEditable;
+
+            //client.ClientSecrets = null;
+            client.AllowedGrantTypes = null;
+            client.RedirectUris = null;
+            client.PostLogoutRedirectUris = null;
+            client.AllowedScopes = null;
+            client.AllowedCorsOrigins = null;
 
             //List<ClientIdPRestriction> clientIdPRestrictions = new List<ClientIdPRestriction>();
             //foreach (var item in clientUpdateDto.IdentityProviderRestrictions)
@@ -590,14 +613,14 @@ namespace MagusAppGateway.Services.Services
             //    });
             //}
 
-            //List<ClientCorsOrigin> clientCorsOrigins = new List<ClientCorsOrigin>();
-            //foreach (var item in clientUpdateDto.AllowedCorsOrigins)
-            //{
-            //    clientCorsOrigins.Add(new ClientCorsOrigin
-            //    {
-            //        Origin = item.Origin
-            //    });
-            //}
+            List<ClientCorsOrigin> clientCorsOrigins = new List<ClientCorsOrigin>();
+            foreach (var item in clientUpdateDto.AllowedCorsOrigins)
+            {
+                clientCorsOrigins.Add(new ClientCorsOrigin
+                {
+                    Origin = item.Origin
+                });
+            }
 
             //List<ClientProperty> clientProperties = new List<ClientProperty>();
             //foreach (var item in clientUpdateDto.Properties)
@@ -609,63 +632,63 @@ namespace MagusAppGateway.Services.Services
             //    });
             //}
 
-            //List<ClientScope> clientScopes = new List<ClientScope>();
-            //foreach (var item in clientUpdateDto.AllowedScopes)
-            //{
-            //    clientScopes.Add(new ClientScope
-            //    {
-            //        Scope = item.Scope
-            //    });
-            //}
+            List<ClientScope> clientScopes = new List<ClientScope>();
+            foreach (var item in clientUpdateDto.AllowedScopes)
+            {
+                clientScopes.Add(new ClientScope
+                {
+                    Scope = item.Scope
+                });
+            }
 
-            //List<ClientSecret> clientSecrets = new List<ClientSecret>();
-            //foreach (var item in clientUpdateDto.ClientSecrets)
-            //{
-            //    clientSecrets.Add(new ClientSecret
-            //    {
-            //        Created = DateTime.Now,
-            //        Description = item.Description,
-            //        Expiration = item.Expiration,
-            //        Type = "SharedSecret",
-            //        Value = item.Value.ToSha256(),
-            //    });
-            //}
+            List<ClientSecret> clientSecrets = new List<ClientSecret>();
+            foreach (var item in clientUpdateDto.ClientSecrets)
+            {
+                clientSecrets.Add(new ClientSecret
+                {
+                    Created = DateTime.Now,
+                    Description = item.Description,
+                    Expiration = item.Expiration,
+                    Type = "SharedSecret",
+                    Value = item.Value.ToSha256(),
+                });
+            }
 
-            //List<ClientGrantType> clientGrantTypes = new List<ClientGrantType>();
-            //foreach (var item in clientUpdateDto.AllowedGrantTypes)
-            //{
-            //    clientGrantTypes.Add(new ClientGrantType
-            //    {
-            //        GrantType = item.GrantType
-            //    });
-            //}
+            List<ClientGrantType> clientGrantTypes = new List<ClientGrantType>();
+            foreach (var item in clientUpdateDto.AllowedGrantTypes)
+            {
+                clientGrantTypes.Add(new ClientGrantType
+                {
+                    GrantType = item.GrantType
+                });
+            }
 
-            //List<ClientRedirectUri> clientRedirectUris = new List<ClientRedirectUri>();
-            //foreach (var item in clientUpdateDto.RedirectUris)
-            //{
-            //    clientRedirectUris.Add(new ClientRedirectUri
-            //    {
-            //        RedirectUri = item.RedirectUri
-            //    });
-            //}
+            List<ClientRedirectUri> clientRedirectUris = new List<ClientRedirectUri>();
+            foreach (var item in clientUpdateDto.RedirectUris)
+            {
+                clientRedirectUris.Add(new ClientRedirectUri
+                {
+                    RedirectUri = item.RedirectUri
+                });
+            }
 
-            //List<ClientPostLogoutRedirectUri> clientPostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>();
-            //foreach (var item in clientUpdateDto.PostLogoutRedirectUris)
-            //{
-            //    clientPostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri
-            //    {
-            //        PostLogoutRedirectUri = item.PostLogoutRedirectUri
-            //    });
-            //}
+            List<ClientPostLogoutRedirectUri> clientPostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>();
+            foreach (var item in clientUpdateDto.PostLogoutRedirectUris)
+            {
+                clientPostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri
+                {
+                    PostLogoutRedirectUri = item.PostLogoutRedirectUri
+                });
+            }
 
-
+            //这里是因为没处理好加密，所以先注释掉
             //client.ClientSecrets = clientSecrets;
-            //client.AllowedGrantTypes = clientGrantTypes;
-            //client.RedirectUris = clientRedirectUris;
-            //client.PostLogoutRedirectUris = clientPostLogoutRedirectUris;
-            //client.AllowedScopes = clientScopes;
+            client.AllowedGrantTypes = clientGrantTypes;
+            client.RedirectUris = clientRedirectUris;
+            client.PostLogoutRedirectUris = clientPostLogoutRedirectUris;
+            client.AllowedScopes = clientScopes;
             //client.IdentityProviderRestrictions = clientIdPRestrictions;
-            //client.AllowedCorsOrigins = clientCorsOrigins;
+            client.AllowedCorsOrigins = clientCorsOrigins;
             //client.Properties = clientProperties;
             //client.Claims = clientClaims;
 

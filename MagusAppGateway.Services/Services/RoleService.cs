@@ -27,7 +27,7 @@ namespace MagusAppGateway.Services.Services
             {
                 return new ResultModel(ResultCode.Fail, "请输入角色名称");
             }
-            if (_userDatabaseContext.Users.Any(x => x.UserRoles == rolesEditDto.UserRoles))
+            if (_userDatabaseContext.Roles.Any(x => x.RoleName == rolesEditDto.RoleName))
             {
                 return new ResultModel(ResultCode.Fail, "角色已存在");
             }
@@ -66,7 +66,7 @@ namespace MagusAppGateway.Services.Services
                     query = query.OrderBy(x => x.RoleName);
                     var list = query.Select(x => new RolesDto
                     {
-                        RoleId = x.Id.ToString(),
+                        Id = x.Id.ToString(),
                         RoleName = x.RoleName
                     });
                     var page = PagedList<RolesDto>.ToPagedList(list, rolesQueryDto.CurrentPage, rolesQueryDto.PageSize);
@@ -160,13 +160,13 @@ namespace MagusAppGateway.Services.Services
             {
                 return new ResultModel(ResultCode.Fail, "请输入角色名称");
             }
-            if (_userDatabaseContext.Roles.Any(x => x.RoleName == rolesEditDto.RoleName && x.Id == rolesEditDto.RoleId))
+            if (_userDatabaseContext.Roles.Any(x => x.RoleName == rolesEditDto.RoleName && x.Id == rolesEditDto.Id))
             {
                 return new ResultModel(ResultCode.Fail, "角色已存在");
             }
             try
             {
-                var role = _userDatabaseContext.Roles.FirstOrDefault(x => x.Id == rolesEditDto.RoleId);
+                var role = _userDatabaseContext.Roles.FirstOrDefault(x => x.Id == rolesEditDto.Id);
                 role.RoleName = rolesEditDto.RoleName;
                 _userDatabaseContext.Roles.Update(role);
                 await _userDatabaseContext.SaveChangesAsync();

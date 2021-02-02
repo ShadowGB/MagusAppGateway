@@ -22,8 +22,6 @@ namespace MagusAppGateway.UI
 
             builder.Services.AddOidcAuthentication(options =>
             {
-                // Configure your authentication provider options here.
-                // For more information, see https://aka.ms/blazor-standalone-auth
                 builder.Configuration.Bind("Oidc", options.ProviderOptions);
             });
 
@@ -33,20 +31,20 @@ namespace MagusAppGateway.UI
 
             builder.Services.AddHttpClient<IUserService, UserService>("User", client => client.BaseAddress = new Uri(builder.Configuration["ServiceAddress"]))
                 .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
             builder.Services.AddHttpClient<IRoleService, RoleService>("Role", client => client.BaseAddress = new Uri(builder.Configuration["ServiceAddress"]))
                 .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
             builder.Services.AddHttpClient<IApiScopeService, ApiScopeService>("Api", client => client.BaseAddress = new Uri(builder.Configuration["ServiceAddress"]))
                 .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
             builder.Services.AddHttpClient<IClientService, ClientService>("Client", client => client.BaseAddress = new Uri(builder.Configuration["ServiceAddress"]))
+                .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+            builder.Services.AddHttpClient<IOcelotService, OcelotService>("Ocelot", client => client.BaseAddress = new Uri(builder.Configuration["ServiceAddress"]))
                 .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("User"));
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Role"));
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Api"));
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Client"));
+            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Ocelot"));
 
             // ÃÌº”BootStrap÷ß≥÷
             builder.Services.AddBootstrapBlazor(); 

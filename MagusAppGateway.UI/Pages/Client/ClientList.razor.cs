@@ -7,6 +7,7 @@ using MagusAppGateway.UI.IServices;
 using Microsoft.AspNetCore.Components;
 using MagusAppGateway.UI.Result;
 using MagusAppGateway.UI.ViewModel;
+using IdentityServer4.Models;
 
 namespace MagusAppGateway.UI.Pages.Client
 {
@@ -15,14 +16,21 @@ namespace MagusAppGateway.UI.Pages.Client
         [Inject]
         private IClientService ClientService { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        [Inject]
+        public DialogService DialogService { get; set; }
+
+        [Inject]
+        public ToastService ToastService { get; set; }
+
         protected QueryData<ClientDto> Items { get; set; } = new QueryData<ClientDto>();
 
         protected ClientDto SearchModel { get; set; } = new ClientDto();
 
         protected IEnumerable<ClientDto> SelectedRows { get; set; } = new List<ClientDto>();
+
+        public Toast Toast { get; set; }
+
+        private Table<ClientDto> Table { get; set; }
 
         /// <summary>
         /// 分页参数
@@ -50,6 +58,37 @@ namespace MagusAppGateway.UI.Pages.Client
                 };
             }
             return null;
+        }
+
+
+        protected async Task OnAdd(IEnumerable<ClientDto> dtos)
+        {
+            var option = new DialogOption()
+            {
+                Title = "新增客户端",
+                Size = Size.ExtraLarge,
+                BodyContext = dtos.FirstOrDefault()
+            };
+            option.BodyTemplate = DynamicComponent.CreateComponent<ClientForm>(new KeyValuePair<string, object>[]
+            {
+                new KeyValuePair<string, object>(nameof(ClientForm.OnClose),new Action(async ()=>{ await Table.QueryAsync(); option.Dialog?.Close(); }))
+            }).Render();
+            await DialogService.Show(option);
+        }
+
+        protected async Task OnEdit(ClientDto dto)
+        {
+            var option = new DialogOption()
+            {
+                Title = "编辑客户端",
+                Size = Size.ExtraLarge,
+                BodyContext = dto
+            };
+            option.BodyTemplate = DynamicComponent.CreateComponent<ClientForm>(new KeyValuePair<string, object>[]
+            {
+                new KeyValuePair<string, object>(nameof(ClientForm.OnClose),new Action(async ()=>{ await Table.QueryAsync(); option.Dialog?.Close(); }))
+            }).Render();
+            await DialogService.Show(option);
         }
     }
 }

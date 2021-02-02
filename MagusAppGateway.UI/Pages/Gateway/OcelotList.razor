@@ -1,3 +1,45 @@
 ﻿@page "/ocelotlist"
+@attribute [Authorize]
 
-<h3>OcelotList</h3>
+<GroupBox Title="选择配置" style="margin-top: 1.5rem;">
+    <div class="form-inline">
+        <div class="row">
+            <div class="form-group col-12 col-sm-3">
+                <Select @bind-Value="@SelectedConfigId" TValue="Guid" Items="@ConfigItems" ShowLabel="true" DisplayText="请选择网关配置" />
+            </div>
+            @*<div class="form-group col-auto">
+                <div class="btn-group" role="group">
+                    <Button Color="Color.Primary">新增配置</Button>
+                    <Button Color="Color.Success">启用配置</Button>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</GroupBox>
+
+<GroupBox Title="配置路由列表" style="margin-top: 1.5rem;">
+    <Table TItem="RoutesDto" @ref="Table"
+           IsPagination="true" PageItemsSource="@PageItemsSource"
+           SearchModel="@SearchModel" ShowDefaultButtons="true" ShowEditButton="false" ShowDeleteButton="true"
+           ShowLineNo="true" IsBordered="true" ShowExtendButtons="true" OnQueryAsync="@OnQueryAsync"
+           ShowToolbar="true" ShowSearch="true" ShowAddButton="false" 
+           TableSize="TableSize.Compact" IsStriped="true" OnDeleteAsync="@OnDelete"
+           @bind-SelectedRows="@SelectedRows" ClickToSelect="true">
+        <TableColumns>
+            <TableColumn @bind-Field="@context.Id"  />
+            <TableColumn @bind-Field="@context.DownstreamPathTemplate" />
+            <TableColumn @bind-Field="@context.UpstreamPathTemplate" />
+            <TableColumn @bind-Field="@context.RouteIsCaseSensitive">
+                <Template Context="v">
+                    <Switch IsDisabled="true" Value="v.Value.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
+                </Template>
+            </TableColumn>
+        </TableColumns>
+        <TableToolbarTemplate>
+            <TableToolbarButton TItem="RoutesDto" Color="Color.Success" Icon="fa fa-fw fa-plus" Text="新增" OnClickCallback="@OnAdd"/>
+        </TableToolbarTemplate>
+        <RowButtonTemplate>
+            <TableCellButton Size="Size.ExtraSmall" Color="Color.Info" TItem="RoutesDto" Item="@context" Icon="fa fa-edit" Text="编辑" OnClickCallback="@OnEdit"/>
+        </RowButtonTemplate>
+    </Table>
+ </GroupBox>

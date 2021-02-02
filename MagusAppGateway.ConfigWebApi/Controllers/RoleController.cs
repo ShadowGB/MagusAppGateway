@@ -27,7 +27,7 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         /// <param name="userId">用户编号</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetById([FromQuery] string userId)
+        public async Task<IActionResult> GetByUserId([FromQuery] string userId)
         {
             return Json(await _roleService.GetRolesByUserId(Guid.Parse(userId)));
         }
@@ -65,6 +65,39 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         public async Task<IActionResult> SetUserRoleByUserIdAndRoleIds([FromBody]SetUserRoleDto dto)
         {
             return Json(await _roleService.SetUserRoleByUserIdAndRoleIds(dto.UserId, dto.RoleIds));
+        }
+
+        /// <summary>
+        /// 新增角色
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> CreateRole(RolesEditDto dto)
+        {
+            return Json(await _roleService.CreateRoles(dto));
+        }
+
+        /// <summary>
+        /// 更新角色
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> UpdateRoles(RolesEditDto dto)
+        {
+            return Json(await _roleService.UpdateRoles(dto));
+        }
+
+        /// <summary>
+        /// 查询角色
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> GetRolesPage([FromBody]RolesQueryDto dto)
+        {
+            return Json(await _roleService.GetRoles(dto));
         }
     }
 }

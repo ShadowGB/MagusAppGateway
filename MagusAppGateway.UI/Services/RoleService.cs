@@ -21,6 +21,49 @@ namespace MagusAppGateway.UI.Services
             _httpClient = httpClient;
         }
 
+        public async Task<ResultModel<string>> AddRole(RoleDto dto)
+        {
+            var apiJson = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"api/Role/CreateRole", apiJson);
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResultModel<string>>(await response.Content.ReadAsStringAsync());
+            }
+            return null;
+        }
+
+        public async Task<ResultModel<string>> EditRole(RoleDto dto)
+        {
+            var apiJson = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"api/Role/UpdateRoles", apiJson);
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResultModel<string>>(await response.Content.ReadAsStringAsync());
+            }
+            return null;
+        }
+
+        public Task<ResultModel<List<RoleDto>>> GetAllRole()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResultModel<RoleDto>> GetRoleById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ResultModel<PagedList<RoleDto>>> GetRolePage(RoleQueryDto dto)
+        {
+            var clientJson = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"/api/Role/GetRolesPage", clientJson);
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResultModel<PagedList<RoleDto>>>(await response.Content.ReadAsStringAsync());
+            }
+            return null;
+        }
+
         public async Task<ResultModel<PagedList<UserRoleDto>>> GetUserRole(UserRoleDto dto)
         {
             var userRoleJson = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, "application/json");

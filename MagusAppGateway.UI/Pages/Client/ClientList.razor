@@ -1,13 +1,12 @@
 ﻿@page "/clientlist"
 @attribute [Authorize]
 
-<Table TItem="ClientDto"
+<Table TItem="ClientDto" @ref="Table"
        IsPagination="true" PageItemsSource="@PageItemsSource"
-       SearchModel="@SearchModel" ShowDefaultButtons="true" ShowEditButton="true" ShowDeleteButton="false"
+       SearchModel="@SearchModel" ShowDefaultButtons="true" ShowEditButton="false" ShowDeleteButton="false"
        ShowLineNo="true" IsBordered="true" ShowExtendButtons="true" OnQueryAsync="@OnQueryAsync"
-       ShowToolbar="true" ShowSearch="true" ShowAddButton="true"
-       AddModalTitle="新增用户" EditModalTitle="编辑用户"
-       TableSize="TableSize.Compact" IsStriped="true" 
+       ShowToolbar="true" ShowSearch="true" ShowAddButton="false" 
+       TableSize="TableSize.Compact" IsStriped="true"
        @bind-SelectedRows="@SelectedRows" ClickToSelect="true">
     <TableColumns>
         <TableColumn @bind-Field="@context.Id" />
@@ -27,4 +26,11 @@
         <TableColumn @bind-Field="@context.Created" />
         <TableColumn @bind-Field="@context.Updated" />
     </TableColumns>
+    <TableToolbarTemplate>
+        <TableToolbarButton TItem="ClientDto" Color="Color.Success" Icon="fa fa-fw fa-plus" Text="新增" OnClickCallback="@OnAdd" />
+    </TableToolbarTemplate>
+    <RowButtonTemplate>
+        <TableCellButton Size="Size.ExtraSmall" Color="Color.Info" TItem="ClientDto" Item="@context" Icon="fa fa-edit" Text="编辑" OnClickCallback="@OnEdit"/>
+    </RowButtonTemplate>
 </Table>
+

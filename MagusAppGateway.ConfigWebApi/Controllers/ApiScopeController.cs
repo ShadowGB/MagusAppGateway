@@ -41,5 +41,11 @@ namespace MagusAppGateway.ConfigWebApi.Controllers
         {
             return Json(await _apiScopeService.UpdateApiScope(dto));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            return Json(await _apiScopeService.GetAll());
+        }
     }
 }

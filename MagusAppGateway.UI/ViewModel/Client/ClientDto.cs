@@ -7,6 +7,19 @@ namespace MagusAppGateway.UI.ViewModel
 {
     public class ClientDto: QueryModelBase
     {
+        public ClientDto()
+        {
+            ClientSecrets = new List<ClientSecretDto>();
+            AllowedGrantTypes = new List<ClientGrantTypeDto>();
+            RedirectUris = new List<ClientRedirectUriDto>();
+            PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUriDto>();
+            AllowedScopes = new List<ClientScopeDto>();
+            IdentityProviderRestrictions = new List<ClientIdPRestrictionDto>();
+            Claims = new List<ClientClaimDto>();
+            AllowedCorsOrigins = new List<ClientCorsOriginDto>();
+            Properties = new List<ClientPropertyDto>();
+        }
+
         [Display(Name = "编号")]
         public int Id { get; set; }
 
